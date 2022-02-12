@@ -13,7 +13,12 @@ class Mesh
 {
 public:
 
+	static Mesh* generaPoligonoRegular(GLuint num, GLdouble r);
+	static Mesh* generaTrianguloRGB(GLdouble r);
 	static Mesh* createRGBAxes(GLdouble l); // creates a new 3D-RGB axes mesh
+	static Mesh* generaRectangulo(GLdouble w, GLdouble h);
+	static Mesh* generaRectanguloRGB(GLdouble w, GLdouble h);
+	static Mesh* generaCubo(GLdouble lon);
 	
 	Mesh() {};
 	virtual ~Mesh() {};
