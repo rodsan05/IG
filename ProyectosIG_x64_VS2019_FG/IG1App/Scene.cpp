@@ -36,7 +36,23 @@ void Scene::init()
 	//gObjects.push_back(new RectanguloRGB(200, 100));
 
 	//Apartado 8
-	gObjects.push_back(new Cubo(200));
+	//gObjects.push_back(new Cubo(200));
+
+	if (mId == 0) {
+	
+		Abs_Entity* circunference = new PoligonoRegular(256, 100.0);
+		circunference->setMColor({ 1.0, 0.0, 1.0, 1.0 });
+		gObjects.push_back(circunference);
+
+		gObjects.push_back(new RectanguloRGB(200, 100));
+
+		gObjects.push_back(new TrianguloRGB(50.0));
+	}
+
+	if (mId == 1) {
+		//Apartado 9
+		gObjects.push_back(new CuboRGB(200));
+	}
 }
 //-------------------------------------------------------------------------
 void Scene::free() 
@@ -70,6 +86,24 @@ void Scene::render(Camera const& cam) const
 	for (Abs_Entity* el : gObjects)
 	{
 	  el->render(cam.viewMat());
+	}
+}
+void Scene::update()
+{
+	for (Abs_Entity* el : gObjects)
+	{
+		el->update();
+	}
+}
+void Scene::setState(int id)
+{
+	if (id != mId) {
+
+		free();
+		gObjects.clear();
+
+		mId = id;
+		init();
 	}
 }
 //-------------------------------------------------------------------------
