@@ -78,11 +78,6 @@ public:
 	explicit Cubo(GLdouble lon);
 	~Cubo();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
-
-protected:
-
-	Mesh* tapaSup = nullptr;
-	Mesh* tapaInf = nullptr;
 };
 
 //-------------------------------------------------------------------------

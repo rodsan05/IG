@@ -138,23 +138,80 @@ Mesh* Mesh::generaCubo(GLdouble lon)
 {
     Mesh* mesh = new Mesh();
 
-    mesh->mPrimitive = GL_TRIANGLE_STRIP;
+    mesh->mPrimitive = GL_TRIANGLES;
 
-    mesh->mNumVertices = 10;
+    mesh->mNumVertices = 36;
     mesh->vVertices.reserve(mesh->mNumVertices);
 
+    static const GLfloat cube_strip[] = {
+        +0.5, +0.5, -0.5, // Back-top-right
+        -0.5, +0.5, -0.5, // Back-top-left
+        +0.5, -0.5, -0.5, // Back-bottom-right
+        -0.5, -0.5, -0.5, // Back-bottom-left
+        -0.5, -0.5, +0.5, // Front-bottom-left
+        -0.5, +0.5, -0.5, // Back-top-left
+        -0.5, +0.5, +0.5, // Front-top-left
+        +0.5, +0.5, -0.5, // Back-top-right
+        +0.5, +0.5, +0.5, // Front-top-right
+        +0.5, -0.5, -0.5, // Back-bottom-right
+        +0.5, -0.5, +0.5, // Front-bottom-right
+        -0.5, -0.5, +0.5, // Front-bottom-left
+        +0.5, +0.5, +0.5, // Front-top-right
+        -0.5, +0.5, +0.5, // Front-top-left
+    };
+
+    //cara delantera
     mesh->vVertices.emplace_back(-lon / 2, lon / 2, lon / 2);
     mesh->vVertices.emplace_back(-lon / 2, -lon / 2, lon / 2);
     mesh->vVertices.emplace_back(lon / 2, lon / 2, lon / 2);
+
+    mesh->vVertices.emplace_back(lon / 2, lon / 2, lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -lon / 2, lon / 2);
     mesh->vVertices.emplace_back(lon / 2, -lon / 2, lon / 2);
 
-    mesh->vVertices.emplace_back(lon / 2, lon / 2, -lon / 2);
+    //lateral derecha
+    mesh->vVertices.emplace_back(lon / 2, lon / 2, lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, -lon / 2, lon / 2);
     mesh->vVertices.emplace_back(lon / 2, -lon / 2, -lon / 2);
 
+    mesh->vVertices.emplace_back(lon / 2, lon / 2, lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, -lon / 2, -lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, lon / 2, -lon / 2);
+
+    //cara trasera
     mesh->vVertices.emplace_back(-lon / 2, lon / 2, -lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -lon / 2, -lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, lon / 2, -lon / 2);
+
+    mesh->vVertices.emplace_back(lon / 2, lon / 2, -lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -lon / 2, -lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, -lon / 2, -lon / 2);
+
+    //lateral izquierda
+    mesh->vVertices.emplace_back(-lon / 2, lon / 2, lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -lon / 2, lon / 2);
     mesh->vVertices.emplace_back(-lon / 2, -lon / 2, -lon / 2);
 
     mesh->vVertices.emplace_back(-lon / 2, lon / 2, lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -lon / 2, -lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, lon / 2, -lon / 2);
+
+    //superior
+    mesh->vVertices.emplace_back(lon / 2, lon / 2, lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, lon / 2, -lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, lon / 2, -lon / 2);
+
+    mesh->vVertices.emplace_back(lon / 2, lon / 2, lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, lon / 2, -lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, lon / 2, lon / 2);
+
+    //inferior
+    mesh->vVertices.emplace_back(lon / 2, -lon / 2, lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, -lon / 2, -lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -lon / 2, -lon / 2);
+
+    mesh->vVertices.emplace_back(lon / 2, -lon / 2, lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -lon / 2, -lon / 2);
     mesh->vVertices.emplace_back(-lon / 2, -lon / 2, lon / 2);
 
     return mesh;
