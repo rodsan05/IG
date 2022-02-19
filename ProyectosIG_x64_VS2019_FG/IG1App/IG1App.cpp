@@ -23,7 +23,7 @@ void IG1App::close()
 void IG1App::update()
 {
 	GLuint time = glutGet(GLUT_ELAPSED_TIME);
-	if (time - mLastUpdateTime >= 1000/60) {
+	if (time - mLastUpdateTime >= 1000/60 && updateActive) {
 		mScene->update();
 		glutPostRedisplay();
 		mLastUpdateTime = glutGet(GLUT_ELAPSED_TIME);
@@ -139,6 +139,9 @@ void IG1App::key(unsigned char key, int x, int y)
 		break;
 	case 'o':
 		mCamera->set2D();
+		break;
+	case 'u':
+		updateActive = !updateActive;
 		break;
 	case '0':
 		mScene->setState(0);

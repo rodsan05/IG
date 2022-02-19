@@ -40,13 +40,17 @@ void Scene::init()
 
 	if (mId == 0) {
 	
-		Abs_Entity* circunference = new PoligonoRegular(256, 100.0);
+		GLdouble radius = 200.0;
+		Abs_Entity* circunference = new PoligonoRegular(256, radius);
 		circunference->setMColor({ 1.0, 0.0, 1.0, 1.0 });
 		gObjects.push_back(circunference);
 
-		gObjects.push_back(new RectanguloRGB(200, 100));
+		gObjects.push_back(new RectanguloRGB(400, 200));
 
-		gObjects.push_back(new TrianguloRGB(50.0));
+		Abs_Entity* trianguloRGB = new TrianguloRGB(50.0);
+		gObjects.push_back(trianguloRGB);
+
+		trianguloRGB->setModelMat(translate(trianguloRGB->modelMat(), dvec3(radius, 0, 0)));
 	}
 
 	if (mId == 1) {

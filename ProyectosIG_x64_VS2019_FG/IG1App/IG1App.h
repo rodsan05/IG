@@ -38,7 +38,7 @@ public:
 	
 protected:
 
-	IG1App() {};
+	IG1App(): updateActive(false) {};
 	~IG1App() { close(); };
 
 	void init();
@@ -68,6 +68,8 @@ protected:
 	int mWinId = 0;	    // window's identifier
 	int mWinW = 800;    // window's width 
 	int mWinH = 600;    // window's height
+
+	bool updateActive;
 
 	GLuint mLastUpdateTime;
 };

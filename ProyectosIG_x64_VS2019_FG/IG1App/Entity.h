@@ -64,6 +64,13 @@ public:
 	explicit TrianguloRGB(GLdouble r);
 	~TrianguloRGB();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
+
+	void update() override;
+
+protected:
+	GLdouble radius;
+	GLdouble alpha;
+	GLdouble rotationPerFrame;
 };
 
 class RectanguloRGB : public Abs_Entity

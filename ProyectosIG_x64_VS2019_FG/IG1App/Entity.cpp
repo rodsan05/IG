@@ -65,6 +65,9 @@ void PoligonoRegular::render(glm::dmat4 const& modelViewMat) const
 TrianguloRGB::TrianguloRGB(GLdouble r)
 {
 	mMesh = Mesh::generaTrianguloRGB(r);
+	radius = 200;
+	alpha = 0.0;
+	rotationPerFrame = 3.0;
 }
 
 TrianguloRGB::~TrianguloRGB()
@@ -83,6 +86,17 @@ void TrianguloRGB::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
+void TrianguloRGB::update()
+{
+	dmat4 mI = dmat4(1);
+
+	mModelMat = translate(mModelMat, dvec3(-radius * cos(radians(alpha)), -radius * sin(radians(alpha)), 0));
+	mModelMat = rotate(mModelMat, radians(-rotationPerFrame), dvec3(0, 0, 1));
+
+	alpha += rotationPerFrame + 1;
+	mModelMat = translate(mModelMat, dvec3(radius * cos(radians(alpha)), radius * sin(radians(alpha)), 0));
+}
+
 RectanguloRGB::RectanguloRGB(GLdouble w, GLdouble h)
 {
 	mMesh = Mesh::generaRectanguloRGB(w, h);
@@ -99,8 +113,8 @@ void RectanguloRGB::render(glm::dmat4 const& modelViewMat) const
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 		glLineWidth(2);
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glPolygonMode(GL_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT, GL_LINE);
+		glPolygonMode(GL_BACK, GL_FILL);
 		mMesh->render();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glLineWidth(1);

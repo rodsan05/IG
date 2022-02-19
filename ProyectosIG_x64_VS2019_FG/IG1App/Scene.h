@@ -28,6 +28,7 @@ public:
 	void update();
 
 	void setState(int id);
+	void setUpdateActive(bool set);
 	
 protected:
 	void free();
@@ -37,6 +38,7 @@ protected:
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
 
 	int mId;
+	bool updateActive;
 };
 //-------------------------------------------------------------------------
 
