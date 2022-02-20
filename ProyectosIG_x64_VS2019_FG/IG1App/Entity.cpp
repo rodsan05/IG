@@ -3,6 +3,8 @@
 #include <gtc/matrix_transform.hpp>  
 #include <gtc/type_ptr.hpp>
 
+#include <vector>
+
 using namespace glm;
 
 //-------------------------------------------------------------------------
@@ -88,8 +90,6 @@ void TrianguloRGB::render(glm::dmat4 const& modelViewMat) const
 
 void TrianguloRGB::update()
 {
-	dmat4 mI = dmat4(1);
-
 	mModelMat = translate(mModelMat, dvec3(-radius * cos(radians(alpha)), -radius * sin(radians(alpha)), 0));
 	mModelMat = rotate(mModelMat, radians(-rotationPerFrame), dvec3(0, 0, 1));
 
@@ -148,6 +148,11 @@ void Cubo::render(glm::dmat4 const& modelViewMat) const
 CuboRGB::CuboRGB(GLdouble lon)
 {
 	mMesh = Mesh::generaCuboTriangulosRGB(lon);
+
+	axis = 0;
+	alpha = 0;
+	rotationPerFrame = 2.0;
+	mLon = lon;
 }
 
 CuboRGB::~CuboRGB()
@@ -166,5 +171,27 @@ void CuboRGB::render(glm::dmat4 const& modelViewMat) const
 		mMesh->render();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glLineWidth(1);
+	}
+}
+
+void CuboRGB::update()
+{
+	std::vector<dvec3> rotationVec = { dvec3(0, 1, 0), dvec3(1, 0, 0), dvec3(0, 0, 1) };
+
+	if (alpha < 180) {
+
+		mModelMat = translate(mModelMat, dvec3(mLon / 2, -mLon / 2, -mLon / 2));
+
+		mModelMat = rotate(mModelMat, radians(rotationPerFrame), rotationVec[axis]);
+		mModelMat = translate(mModelMat, dvec3(-mLon / 2, mLon / 2, mLon / 2));
+
+		alpha += rotationPerFrame;
+	}
+	else {
+
+		alpha = 0;
+
+		if (axis < 2) axis++;
+		else axis = 0;
 	}
 }

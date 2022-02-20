@@ -55,7 +55,12 @@ void Scene::init()
 
 	if (mId == 1) {
 		//Apartado 9
-		gObjects.push_back(new CuboRGB(200));
+
+		GLdouble lon = 200;
+		Abs_Entity* cuboRGB = new CuboRGB(lon);
+		gObjects.push_back(cuboRGB);
+
+		cuboRGB->setModelMat(translate(cuboRGB->modelMat(), dvec3(-lon/2, lon/2, lon/2)));
 	}
 }
 //-------------------------------------------------------------------------

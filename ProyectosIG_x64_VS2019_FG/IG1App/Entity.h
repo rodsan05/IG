@@ -95,6 +95,14 @@ public:
 	explicit CuboRGB(GLdouble lon);
 	~CuboRGB();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
+
+	void update() override;
+
+protected:
+	GLdouble alpha;
+	GLdouble rotationPerFrame;
+	int axis;
+	GLdouble mLon;
 };
 
 //-------------------------------------------------------------------------
