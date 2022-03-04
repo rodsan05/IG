@@ -20,6 +20,9 @@ public:
 	static Mesh* generaRectanguloRGB(GLdouble w, GLdouble h);
 	static Mesh* generaCubo(GLdouble lon);
 	static Mesh* generaCuboTriangulosRGB(GLdouble lon);
+	static Mesh* generaRectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh);
+	static Mesh* generaContCaja(GLdouble lon);
+	static Mesh* generaContCajaTexCor(GLdouble lon);
 	
 	Mesh() {};
 	virtual ~Mesh() {};
@@ -40,6 +43,8 @@ protected:
 	std::vector<glm::dvec3> vVertices;  // vertex array
 	std::vector<glm::dvec4> vColors;    // color array
 	virtual void draw() const;
+
+	std::vector<glm::dvec2> vTexCoords;
 };
 //-------------------------------------------------------------------------
 

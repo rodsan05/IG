@@ -9,7 +9,12 @@ using namespace glm;
 
 //-------------------------------------------------------------------------
 
-void Abs_Entity::upload(dmat4 const& modelViewMat) const 
+void Abs_Entity::setTexture(Texture* tex)
+{
+	mTexture = tex;
+}
+
+void Abs_Entity::upload(dmat4 const& modelViewMat) const
 { 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixd(value_ptr(modelViewMat));  // transfers modelView matrix to the GPU
@@ -193,5 +198,71 @@ void CuboRGB::update()
 
 		if (axis < 2) axis++;
 		else axis = 0;
+	}
+}
+
+Suelo::Suelo(GLdouble w, GLdouble h, Texture* t)
+{
+	mMesh = Mesh::generaRectanguloTexCor(w, h, 4, 4);
+
+	mModelMat = rotate(mModelMat, radians(-90.0), dvec3(1, 0, 0));
+
+	mTexture = t;
+}
+
+Suelo::~Suelo()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Suelo::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+		//glColor4dv(value_ptr(mColor));
+		mTexture->bind(GL_REPLACE);
+		mMesh->render();
+		mTexture->unbind();
+		glColor4d(1, 1, 1, 1);
+	}
+}
+
+ContornoCaja::ContornoCaja(GLdouble lon, Texture* t, Texture* inText)
+{
+	mMesh = Mesh::generaContCajaTexCor(lon);
+
+	mTexture = t;
+	insideText = inText;
+}
+
+ContornoCaja::~ContornoCaja()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void ContornoCaja::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_BACK);
+		mTexture->bind(GL_REPLACE);
+		mMesh->render();
+		mTexture->unbind();
+
+		glDisable(GL_CULL_FACE);
+
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_FRONT);
+		insideText->bind(GL_REPLACE);
+		mMesh->render();
+		insideText->unbind();
+
+		glDisable(GL_CULL_FACE);
 	}
 }

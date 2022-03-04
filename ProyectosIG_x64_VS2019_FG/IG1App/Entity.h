@@ -6,6 +6,7 @@
 #include <glm.hpp>
 
 #include "Mesh.h"
+#include "Texture.h"
 
 //-------------------------------------------------------------------------
 
@@ -29,10 +30,14 @@ public:
 	//mColor get & set
 	glm::dvec4 const& getMColor() const { return mColor; };
 	void setMColor(glm::dvec4 const& col) { mColor = col; };
+
+	void setTexture(Texture* tex);
 	
 protected:
 
 	Mesh* mMesh = nullptr;   // the mesh
+	Texture* mTexture = nullptr;
+
 	glm::dmat4 mModelMat;    // modeling matrix
 
 	glm::dvec4 mColor;	//mesh color
@@ -103,6 +108,24 @@ protected:
 	GLdouble rotationPerFrame;
 	int axis;
 	GLdouble mLon;
+};
+
+class Suelo : public Abs_Entity
+{
+public:
+	explicit Suelo(GLdouble w, GLdouble h, Texture* t);
+	~Suelo();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class ContornoCaja : public Abs_Entity 
+{
+public:
+	explicit ContornoCaja(GLdouble lon, Texture* t, Texture* inText);
+	~ContornoCaja();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	Texture* insideText;
 };
 
 //-------------------------------------------------------------------------

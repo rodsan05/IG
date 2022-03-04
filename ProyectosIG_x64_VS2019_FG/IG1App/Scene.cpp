@@ -53,7 +53,7 @@ void Scene::init()
 		trianguloRGB->setModelMat(translate(trianguloRGB->modelMat(), dvec3(radius, 0, 0)));
 	}
 
-	if (mId == 1) {
+	else if (mId == 1) {
 		//Apartado 9
 
 		GLdouble lon = 200;
@@ -61,6 +61,30 @@ void Scene::init()
 		gObjects.push_back(cuboRGB);
 
 		cuboRGB->setModelMat(translate(cuboRGB->modelMat(), dvec3(-lon/2, lon/2, lon/2)));
+	}
+
+	else if (mId == 2) {
+	
+		Texture* t = new Texture();
+		t->load("..\\Bmps\\baldosaC.bmp");
+		gTextures.push_back(t);
+
+		Abs_Entity* suelo = new Suelo(200, 200, t);
+		gObjects.push_back(suelo);
+	}
+
+	else if (mId == 3) {
+	
+		Texture* t = new Texture();
+		t->load("..\\Bmps\\container.bmp");
+		gTextures.push_back(t);
+
+		Texture* inT = new Texture();
+		inT->load("..\\Bmps\\papelE.bmp");
+		gTextures.push_back(inT);
+
+		Abs_Entity* caja = new ContornoCaja(200, t, inT);
+		gObjects.push_back(caja);
 	}
 }
 //-------------------------------------------------------------------------
@@ -71,6 +95,13 @@ void Scene::free()
 	{
 		delete el;  el = nullptr;
 	}
+
+	for (Texture* t : gTextures) 
+	{
+		delete t;
+	}
+
+	gTextures.clear();
 }
 //-------------------------------------------------------------------------
 void Scene::setGL() 
@@ -79,12 +110,15 @@ void Scene::setGL()
 	glClearColor(0.6, 0.7, 0.8, 1.0);  // background color (alpha=1 -> opaque)
 	glEnable(GL_DEPTH_TEST);  // enable Depth test 
 
+	glEnable(GL_TEXTURE_2D);
 }
 //-------------------------------------------------------------------------
 void Scene::resetGL() 
 {
 	glClearColor(.0, .0, .0, .0);  // background color (alpha=1 -> opaque)
 	glDisable(GL_DEPTH_TEST);  // disable Depth test 	
+
+	glDisable(GL_TEXTURE_2D);
 }
 //-------------------------------------------------------------------------
 
