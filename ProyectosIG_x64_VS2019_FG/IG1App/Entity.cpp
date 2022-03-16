@@ -300,9 +300,7 @@ void Estrella3D::render(glm::dmat4 const& modelViewMat) const
 
 void Estrella3D::update()
 {
-	alpha += 2.0;
 	mModelMat = rotate(mModelMat, radians(2.0), dvec3(0, 1, 1));
-	//mModelMat = rotate(mModelMat, radians(2.0), dvec3(0, 1, 0));
 }
 
 Cristalera::Cristalera(GLdouble lon, GLdouble h, Texture* t)
