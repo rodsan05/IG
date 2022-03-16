@@ -17,7 +17,7 @@
 class Scene	
 { 
 public:
-	Scene(): mId(0) {};
+	Scene(): mId(0), updateActive(false) {};
 	~Scene() { free(); resetGL(); };
 
 	Scene(const Scene& s) = delete;  // no copy constructor
@@ -38,6 +38,7 @@ protected:
 	void resetGL();
 
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
+	std::vector<Abs_Entity*> gTranslucidObjects;
 
 	std::vector<Texture*> gTextures;
 

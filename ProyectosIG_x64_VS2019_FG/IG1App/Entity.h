@@ -118,6 +118,14 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
+class Hierbas : public Abs_Entity
+{
+public:
+	explicit Hierbas(GLdouble w, GLdouble h, Texture* t);
+	~Hierbas();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
 class ContornoCaja : public Abs_Entity 
 {
 public:
@@ -128,6 +136,63 @@ protected:
 	Texture* insideText;
 };
 
+class Caja : public Abs_Entity
+{
+public:
+	explicit Caja(GLdouble lon, Texture* t, Texture* inText);
+	~Caja();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+
+	void update() override;
+
+protected:
+	Texture* insideText;
+
+	Mesh* top;
+	Mesh* bottom;
+
+	glm::dmat4 mModelMatTop;
+	glm::dmat4 mModelMatBot;
+
+	GLdouble l;
+	GLdouble alpha;
+	GLdouble beta;
+	int dir;
+};
+
+class Estrella3D : public Abs_Entity
+{
+public:
+	explicit Estrella3D(GLdouble re, GLuint np, GLdouble h);
+	~Estrella3D();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+
+	void update() override;
+protected:
+	GLdouble alpha;
+};
+
+class Cristalera : public Abs_Entity
+{
+public:
+	explicit Cristalera(GLdouble lon, GLdouble h, Texture* t);
+	~Cristalera();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class Foto : public Abs_Entity
+{
+public:
+	explicit Foto(GLdouble w, GLdouble h);
+	~Foto();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+
+	void update() override;
+
+protected:
+
+	GLdouble width, height;
+};
 //-------------------------------------------------------------------------
 
 #endif //_H_Entities_H_

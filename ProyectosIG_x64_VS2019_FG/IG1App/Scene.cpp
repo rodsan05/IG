@@ -69,8 +69,18 @@ void Scene::init()
 		t->load("..\\Bmps\\baldosaC.bmp");
 		gTextures.push_back(t);
 
-		Abs_Entity* suelo = new Suelo(200, 200, t);
+		Abs_Entity* suelo = new Suelo(500, 500, t);
 		gObjects.push_back(suelo);
+
+		t = new Texture();
+		t->load("..\\Bmps\\grass.bmp", u8vec3(0, 0, 0), 0);
+		gTextures.push_back(t);
+
+		Abs_Entity* hierbas = new Hierbas(100, 100, t);
+		gObjects.push_back(hierbas);
+
+		Abs_Entity* foto = new Foto(80, 60);
+		gObjects.push_back(foto);
 	}
 
 	else if (mId == 3) {
@@ -83,8 +93,24 @@ void Scene::init()
 		inT->load("..\\Bmps\\papelE.bmp");
 		gTextures.push_back(inT);
 
-		Abs_Entity* caja = new ContornoCaja(200, t, inT);
+		Abs_Entity* caja = new Caja(200, t, inT);
 		gObjects.push_back(caja);
+	}
+
+	else if (mId == 4) {
+
+		Abs_Entity* estrella = new Estrella3D(200, 6, 200);
+		gObjects.push_back(estrella);
+	}
+
+	else if (mId == 5) {
+
+		Texture* t = new Texture();
+		t->load("..\\Bmps\\windowV.bmp", 80);
+		gTextures.push_back(t);
+
+		Abs_Entity* cristalera = new Cristalera(200, 100, t);
+		gTranslucidObjects.push_back(cristalera);
 	}
 }
 //-------------------------------------------------------------------------
@@ -96,12 +122,15 @@ void Scene::free()
 		delete el;  el = nullptr;
 	}
 
+	for (Abs_Entity* el : gTranslucidObjects)
+	{
+		delete el;  el = nullptr;
+	}
+
 	for (Texture* t : gTextures) 
 	{
 		delete t;
 	}
-
-	gTextures.clear();
 }
 //-------------------------------------------------------------------------
 void Scene::setGL() 
@@ -128,12 +157,22 @@ void Scene::render(Camera const& cam) const
 
 	for (Abs_Entity* el : gObjects)
 	{
-	  el->render(cam.viewMat());
+	    el->render(cam.viewMat());
+	}
+
+	for (Abs_Entity* el : gTranslucidObjects)
+	{
+		el->render(cam.viewMat());
 	}
 }
 void Scene::update()
 {
 	for (Abs_Entity* el : gObjects)
+	{
+		el->update();
+	}
+
+	for (Abs_Entity* el : gTranslucidObjects)
 	{
 		el->update();
 	}
@@ -144,6 +183,8 @@ void Scene::setState(int id)
 
 		free();
 		gObjects.clear();
+		gTranslucidObjects.clear();
+		gTextures.clear();
 
 		mId = id;
 		init();

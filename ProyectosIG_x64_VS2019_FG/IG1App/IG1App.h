@@ -35,6 +35,9 @@ public:
 	void run();    // the main event processing loop
 	void close();  // the application
 	void update();
+
+	int windowHeight();
+	int windowWidth();
 	
 protected:
 

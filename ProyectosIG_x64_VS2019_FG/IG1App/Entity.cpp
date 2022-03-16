@@ -266,3 +266,237 @@ void ContornoCaja::render(glm::dmat4 const& modelViewMat) const
 		glDisable(GL_CULL_FACE);
 	}
 }
+
+Estrella3D::Estrella3D(GLdouble re, GLuint np, GLdouble h)
+{
+	mMesh = Mesh::generaEstrella3D(re, np, h);
+	alpha = 0;
+}
+
+Estrella3D::~Estrella3D()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Estrella3D::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glLineWidth(2);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mMesh->render();
+		
+		aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		aMat = rotate(aMat, radians(180.0), dvec3(0, 1, 0));
+		upload(aMat);
+
+		mMesh->render();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glLineWidth(1);
+	}
+}
+
+void Estrella3D::update()
+{
+	alpha += 2.0;
+	mModelMat = rotate(mModelMat, radians(2.0), dvec3(0, 1, 1));
+	//mModelMat = rotate(mModelMat, radians(2.0), dvec3(0, 1, 0));
+}
+
+Cristalera::Cristalera(GLdouble lon, GLdouble h, Texture* t)
+{
+	mMesh = Mesh::generaContCajaTexCor(lon, h);
+	mTexture = t;
+}
+
+Cristalera::~Cristalera()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Cristalera::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glEnable(GL_BLEND);
+
+		glEnable(GL_DEPTH);
+		glDepthMask(GL_FALSE);
+
+		glBlendFunc(0.5, 0.5);
+		mTexture->bind(GL_REPLACE);
+		mMesh->render();
+		mTexture->unbind();
+
+		glDepthMask(GL_TRUE);
+		glDisable(GL_DEPTH);
+
+		glDisable(GL_BLEND);
+	}
+}
+
+Caja::Caja(GLdouble lon, Texture* t, Texture* inText)
+{
+	mMesh = Mesh::generaContCajaTexCor(lon);
+	top = Mesh::generaRectanguloTexCor(lon, lon, 1, 1);
+	
+	mModelMatTop = translate(dmat4(1), dvec3(0, lon/2, 0));
+	mModelMatTop = rotate(mModelMatTop, radians(-90.0), dvec3(1, 0, 0));
+
+	bottom = Mesh::generaRectanguloTexCor(lon, lon, 1, 1);
+
+	mModelMatBot = translate(dmat4(1), dvec3(0, -lon/2, 0));
+	mModelMatBot = rotate(mModelMatBot, radians(90.0), dvec3(1, 0, 0));
+
+	mTexture = t;
+	insideText = inText;
+	l = lon;
+	alpha = 180;
+	beta = 0;
+	dir = -1;
+}
+
+Caja::~Caja()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Caja::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_BACK);
+		mTexture->bind(GL_REPLACE);
+		mMesh->render();
+		mTexture->unbind();
+
+		glCullFace(GL_FRONT);
+		insideText->bind(GL_REPLACE);
+		mMesh->render();
+		insideText->unbind();
+
+		dmat4 aMatTop = modelViewMat * mModelMatTop;
+		upload(aMatTop);
+
+		glCullFace(GL_BACK);
+		mTexture->bind(GL_REPLACE);
+		top->render();
+		mTexture->unbind();
+
+		glCullFace(GL_FRONT);
+		insideText->bind(GL_REPLACE);
+		top->render();
+		insideText->unbind();
+
+		dmat4 aMatBot = modelViewMat * mModelMatBot;
+		upload(aMatBot);
+
+		glCullFace(GL_BACK);
+		mTexture->bind(GL_REPLACE);
+		bottom->render();
+		mTexture->unbind();
+
+		glCullFace(GL_FRONT);
+		insideText->bind(GL_REPLACE);
+		bottom->render();
+		insideText->unbind();
+
+		glDisable(GL_CULL_FACE);
+	}
+}
+
+void Caja::update()
+{
+	if (alpha > 180 || alpha < 0) dir *= -1;
+
+	alpha += 2.0 * dir;
+	beta += 2.0 * dir;
+	
+	mModelMatTop = translate(dmat4(1), dvec3(l / 2 * cos(radians(alpha)) + l/2, l / 2 * sin(radians(alpha)), 0));
+	mModelMatTop = translate(mModelMatTop, dvec3(0, l / 2, 0));
+	mModelMatTop = rotate(mModelMatTop, radians(beta), dvec3(0, 0, 1));
+	mModelMatTop = rotate(mModelMatTop, radians(-90.0), dvec3(1, 0, 0));
+}
+
+Hierbas::Hierbas(GLdouble w, GLdouble h, Texture* t)
+{
+	mMesh = Mesh::generaRectanguloTexCor(w, h, 1, 1);
+
+	mModelMat = translate(dmat4(1), dvec3(h / 2));
+
+	mTexture = t;
+}
+
+Hierbas::~Hierbas()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Hierbas::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glEnable(GL_ALPHA_TEST);
+
+		glAlphaFunc(GL_GREATER, 0.0);
+		mTexture->bind(GL_REPLACE);
+		mMesh->render();
+
+		aMat = rotate(aMat, radians(60.0), dvec3(0, 1, 0));
+		upload(aMat);
+		mMesh->render();
+
+		aMat = rotate(aMat, radians(60.0), dvec3(0, 1, 0));
+		upload(aMat);
+		mMesh->render();
+
+		mTexture->unbind();
+
+		glDisable(GL_ALPHA_TEST);
+	}
+}
+
+Foto::Foto(GLdouble w, GLdouble h)
+{
+	mMesh = Mesh::generaRectanguloTexCor(w, h, 1, 1);
+	height = h;
+	width = w;
+
+	mModelMat = translate(mModelMat, dvec3(0, 1, 0));
+	mModelMat = rotate(mModelMat, radians(-90.0), dvec3(1, 0, 0));
+
+	mTexture = new Texture();
+	mTexture->loadColorBuffer(w, h);
+}
+
+Foto::~Foto()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Foto::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		mTexture->bind(GL_REPLACE);
+		mMesh->render();
+		mTexture->unbind();
+	}
+}
+
+void Foto::update()
+{
+	mTexture->loadColorBuffer(width, height);
+}

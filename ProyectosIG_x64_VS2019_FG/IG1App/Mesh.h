@@ -22,7 +22,11 @@ public:
 	static Mesh* generaCuboTriangulosRGB(GLdouble lon);
 	static Mesh* generaRectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh);
 	static Mesh* generaContCaja(GLdouble lon);
+	static Mesh* generaContCaja(GLdouble lon, GLdouble h);
 	static Mesh* generaContCajaTexCor(GLdouble lon);
+	static Mesh* generaContCajaTexCor(GLdouble lon, GLdouble h);
+	static Mesh* generaEstrella3D(GLdouble re, GLuint np, GLdouble h);
+	static Mesh* generaEstrella3DTexCor(GLdouble re, GLuint np, GLdouble h);
 	
 	Mesh() {};
 	virtual ~Mesh() {};

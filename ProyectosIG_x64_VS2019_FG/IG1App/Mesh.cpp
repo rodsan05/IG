@@ -365,6 +365,31 @@ Mesh* Mesh::generaContCaja(GLdouble lon)
 
     return mesh;
 }
+Mesh* Mesh::generaContCaja(GLdouble lon, GLdouble h)
+{
+    Mesh* mesh = new Mesh();
+
+    mesh->mPrimitive = GL_TRIANGLE_STRIP;
+
+    mesh->mNumVertices = 10;
+    mesh->vVertices.reserve(mesh->mNumVertices);
+
+    mesh->vVertices.emplace_back(-lon / 2, h / 2, lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -h / 2, lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, h / 2, lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, -h / 2, lon / 2);
+
+    mesh->vVertices.emplace_back(lon / 2, h / 2, -lon / 2);
+    mesh->vVertices.emplace_back(lon / 2, -h / 2, -lon / 2);
+
+    mesh->vVertices.emplace_back(-lon / 2, h / 2, -lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -h / 2, -lon / 2);
+
+    mesh->vVertices.emplace_back(-lon / 2, h / 2, lon / 2);
+    mesh->vVertices.emplace_back(-lon / 2, -h / 2, lon / 2);
+
+    return mesh;
+}
 Mesh* Mesh::generaContCajaTexCor(GLdouble lon)
 {
     Mesh* mesh = generaContCaja(lon);
@@ -384,6 +409,71 @@ Mesh* Mesh::generaContCajaTexCor(GLdouble lon)
 
     mesh->vTexCoords.emplace_back(4, 1);
     mesh->vTexCoords.emplace_back(4, 0);
+
+    return mesh;
+}
+Mesh* Mesh::generaContCajaTexCor(GLdouble lon, GLdouble h)
+{
+    Mesh* mesh = generaContCaja(lon, h);
+
+    mesh->vTexCoords.reserve(10);
+
+    mesh->vTexCoords.emplace_back(0, 1);
+    mesh->vTexCoords.emplace_back(0, 0);
+    mesh->vTexCoords.emplace_back(1, 1);
+    mesh->vTexCoords.emplace_back(1, 0);
+
+    mesh->vTexCoords.emplace_back(2, 1);
+    mesh->vTexCoords.emplace_back(2, 0);
+
+    mesh->vTexCoords.emplace_back(3, 1);
+    mesh->vTexCoords.emplace_back(3, 0);
+
+    mesh->vTexCoords.emplace_back(4, 1);
+    mesh->vTexCoords.emplace_back(4, 0);
+
+    return mesh;
+}
+Mesh* Mesh::generaEstrella3D(GLdouble re, GLuint np, GLdouble h)
+{
+    GLdouble ri = re / 2;
+    GLdouble angle = 360.0 / np;
+
+    Mesh* mesh = new Mesh();
+
+    mesh->mPrimitive = GL_TRIANGLE_FAN;
+
+    mesh->mNumVertices = np*2 + 2;
+    mesh->vVertices.reserve(mesh->mNumVertices);
+
+    mesh->vVertices.emplace_back(0, 0, 0);
+    
+    GLdouble alpha = 90.0;
+    for (int i = 0; i < np; i++)
+    {
+        mesh->vVertices.emplace_back(re * cos(radians(alpha)), re * sin(radians(alpha)), h);
+        alpha += angle / 2.0;
+
+        mesh->vVertices.emplace_back(ri * cos(radians(alpha)), ri * sin(radians(alpha)), h);
+        alpha += angle / 2.0;
+    }
+
+    mesh->vVertices.emplace_back(re * cos(radians(alpha)), re * sin(radians(alpha)), h);
+
+    return mesh;
+}
+Mesh* Mesh::generaEstrella3DTexCor(GLdouble re, GLuint np, GLdouble h)
+{
+    Mesh* mesh = generaEstrella3D(re, np, h);
+
+    mesh->vTexCoords.reserve(mesh->mNumVertices);
+
+    mesh->vTexCoords.emplace_back(0.5, 0.5);
+
+    for (int i = 0; i < np; i++)
+    {
+        mesh->vTexCoords.emplace_back(0, 0);
+    }
 
     return mesh;
 }

@@ -29,6 +29,14 @@ void IG1App::update()
 		mLastUpdateTime = glutGet(GLUT_ELAPSED_TIME);
 	}
 }
+int IG1App::windowHeight()
+{
+	return mWinH;
+}
+int IG1App::windowWidth()
+{
+	return mWinW;
+}
 //-------------------------------------------------------------------------
 
 void IG1App::run()   // enters the main event processing loop
@@ -141,6 +149,9 @@ void IG1App::key(unsigned char key, int x, int y)
 		mCamera->set2D();
 		break;
 	case 'u':
+		mScene->update();
+		break;
+	case 'U':
 		updateActive = !updateActive;
 		break;
 	case '0':
@@ -154,6 +165,12 @@ void IG1App::key(unsigned char key, int x, int y)
 		break;
 	case '3':
 		mScene->setState(3);
+		break;
+	case '4':
+		mScene->setState(4);
+		break;
+	case '5':
+		mScene->setState(5);
 		break;
 	default:
 		need_redisplay = false;
