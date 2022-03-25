@@ -163,7 +163,7 @@ protected:
 class Estrella3D : public Abs_Entity
 {
 public:
-	explicit Estrella3D(GLdouble re, GLuint np, GLdouble h);
+	explicit Estrella3D(GLdouble re, GLuint np, GLdouble h, Texture* t);
 	~Estrella3D();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 
@@ -183,7 +183,7 @@ public:
 class Foto : public Abs_Entity
 {
 public:
-	explicit Foto(GLdouble w, GLdouble h);
+	explicit Foto(GLdouble w, GLdouble h, Texture* t);
 	~Foto();
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 

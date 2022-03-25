@@ -267,10 +267,12 @@ void ContornoCaja::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-Estrella3D::Estrella3D(GLdouble re, GLuint np, GLdouble h)
+Estrella3D::Estrella3D(GLdouble re, GLuint np, GLdouble h, Texture* t)
 {
-	mMesh = Mesh::generaEstrella3D(re, np, h);
+	mMesh = Mesh::generaEstrella3DTexCor(re, np, h);
 	alpha = 0;
+
+	mTexture = t;
 }
 
 Estrella3D::~Estrella3D()
@@ -284,8 +286,7 @@ void Estrella3D::render(glm::dmat4 const& modelViewMat) const
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 
-		glLineWidth(2);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mTexture->bind(GL_REPLACE);
 		mMesh->render();
 		
 		aMat = modelViewMat * mModelMat;  // glm matrix multiplication
@@ -293,14 +294,16 @@ void Estrella3D::render(glm::dmat4 const& modelViewMat) const
 		upload(aMat);
 
 		mMesh->render();
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glLineWidth(1);
+		mTexture->unbind();
 	}
 }
 
 void Estrella3D::update()
 {
-	mModelMat = rotate(mModelMat, radians(2.0), dvec3(0, 1, 1));
+	alpha += 2.0f;
+
+	mModelMat = rotate(dmat4(1), radians(alpha), dvec3(0, 1, 0));
+	mModelMat = rotate(mModelMat, radians(alpha), dvec3(0, 0, 1));
 }
 
 Cristalera::Cristalera(GLdouble lon, GLdouble h, Texture* t)
@@ -464,7 +467,7 @@ void Hierbas::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-Foto::Foto(GLdouble w, GLdouble h)
+Foto::Foto(GLdouble w, GLdouble h, Texture* t)
 {
 	mMesh = Mesh::generaRectanguloTexCor(w, h, 1, 1);
 	height = h;
@@ -473,7 +476,7 @@ Foto::Foto(GLdouble w, GLdouble h)
 	mModelMat = translate(mModelMat, dvec3(0, 1, 0));
 	mModelMat = rotate(mModelMat, radians(-90.0), dvec3(1, 0, 0));
 
-	mTexture = new Texture();
+	mTexture = t;
 	mTexture->loadColorBuffer(w, h);
 }
 

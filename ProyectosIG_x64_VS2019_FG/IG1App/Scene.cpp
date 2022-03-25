@@ -79,7 +79,10 @@ void Scene::init()
 		Abs_Entity* hierbas = new Hierbas(100, 100, t);
 		gObjects.push_back(hierbas);
 
-		Abs_Entity* foto = new Foto(80, 60);
+
+		t = new Texture();
+		gTextures.push_back(t);
+		Abs_Entity* foto = new Foto(80, 60, t);
 		gObjects.push_back(foto);
 	}
 
@@ -99,7 +102,11 @@ void Scene::init()
 
 	else if (mId == 4) {
 
-		Abs_Entity* estrella = new Estrella3D(200, 6, 200);
+		Texture* t = new Texture();
+		t->load("..\\Bmps\\baldosaP.bmp");
+		gTextures.push_back(t);
+
+		Abs_Entity* estrella = new Estrella3D(200, 8, 200, t);
 		gObjects.push_back(estrella);
 	}
 

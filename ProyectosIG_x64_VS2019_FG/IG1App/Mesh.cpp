@@ -470,9 +470,31 @@ Mesh* Mesh::generaEstrella3DTexCor(GLdouble re, GLuint np, GLdouble h)
 
     mesh->vTexCoords.emplace_back(0.5, 0.5);
 
-    for (int i = 0; i < np; i++)
-    {
-        mesh->vTexCoords.emplace_back(0, 0);
+    float distance = 1 / ((float)np / 2);
+
+    for (int i = 0; i < np / 4; i++) {
+    
+        mesh->vTexCoords.emplace_back(0.5 - distance * i, 1);
+    }
+
+    for (int i = 0; i < np / 2; i++) {
+
+        mesh->vTexCoords.emplace_back(0, 1 - distance * i);
+    }
+
+    for (int i = 0; i < np / 2; i++) {
+
+        mesh->vTexCoords.emplace_back(distance * i, 0);
+    }
+
+    for (int i = 0; i < np / 2; i++) {
+
+        mesh->vTexCoords.emplace_back(1, distance * i);
+    }
+
+    for (int i = 0; i < np / 4+1; i++) {
+
+        mesh->vTexCoords.emplace_back(1 - distance * i, 1);
     }
 
     return mesh;
