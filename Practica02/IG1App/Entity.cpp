@@ -153,7 +153,8 @@ void Estrella3D::update()
 {
 	alpha += 2.0f;
 
-	mModelMat = rotate(dmat4(1), radians(alpha), dvec3(0, 1, 0));
+	mModelMat = translate(dmat4(1), dvec3(-60, 70, -60));
+	mModelMat = rotate(mModelMat, radians(alpha), dvec3(0, 1, 0));
 	mModelMat = rotate(mModelMat, radians(alpha), dvec3(0, 0, 1));
 }
 
