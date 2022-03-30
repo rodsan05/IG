@@ -25,6 +25,7 @@ void Camera::uploadVM() const
 void Camera::setVM()
 {
 	mViewMat = lookAt(mEye, mLook, mUp);  // glm::lookAt defines the view matrix 
+	setAxes();
 }
 
 void Camera::set2D() 
@@ -82,6 +83,51 @@ void Camera::setScale(GLdouble s)
 	if (mScaleFact < 0) mScaleFact = 0.01;
 	setPM();
 }
+void Camera::moveLR(GLdouble cs)
+{
+	mEye += mRight * cs;
+	mLook += mRight * cs;
+	setVM();
+}
+void Camera::moveFB(GLdouble cs)
+{
+	mEye += mFront * cs;
+	mLook += mFront * cs;
+	setVM();
+}
+void Camera::moveUD(GLdouble cs)
+{
+	mEye += mUpward * cs;
+	mLook += mUpward * cs;
+	setVM();
+}
+void Camera::pitchReal(GLdouble cs)
+{
+	mViewMat = translate(mViewMat, mEye - mLook);
+	mViewMat = rotate(mViewMat, glm::radians(cs), mUpward);
+	mViewMat = translate(mViewMat, mLook - mEye);
+	setAxes();
+}
+void Camera::yawReal(GLdouble cs)
+{
+	mViewMat = translate(mViewMat, mEye - mLook);
+	mViewMat = rotate(mViewMat, glm::radians(cs), mRight);
+	mViewMat = translate(mViewMat, mLook - mEye);
+	setAxes();
+}
+void Camera::rollReal(GLdouble cs)
+{
+	mViewMat = translate(mViewMat, mEye - mLook);
+	mViewMat = rotate(mViewMat, glm::radians(cs), mFront);
+	mViewMat = translate(mViewMat, mLook - mEye);
+	setAxes();
+}
+void Camera::changePrj()
+{
+	bOrto = !bOrto;
+
+	setPM();
+}
 //-------------------------------------------------------------------------
 
 void Camera::setPM() 
@@ -90,6 +136,16 @@ void Camera::setPM()
 		mProjMat = ortho(xLeft*mScaleFact, xRight*mScaleFact, yBot*mScaleFact, yTop*mScaleFact, mNearVal, mFarVal);
 		// glm::ortho defines the orthogonal projection matrix
 	}
+	else {
+		mProjMat = frustum(xLeft * mScaleFact, xRight * mScaleFact, yBot * mScaleFact, yTop * mScaleFact, mNearVal, mFarVal);
+	}
+}
+
+void Camera::setAxes()
+{
+	mRight = row(mViewMat, 0);
+	mUpward = row(mViewMat, 1);
+	mFront = -row(mViewMat, 2);
 }
 
 void Camera::uploadPM() const 

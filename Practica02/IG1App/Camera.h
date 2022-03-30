@@ -38,6 +38,16 @@ public:
 	// transfers its viewport, the view matrix and projection matrix to the GPU
 	void upload() const { mViewPort->upload();  uploadVM(); uploadPM(); }; 
 
+	void moveLR(GLdouble cs); // A izquierda/A derecha
+	void moveFB(GLdouble cs); // Adelante/Atrás
+	void moveUD(GLdouble cs); // Arriba/Abajo
+
+	void pitchReal(GLdouble cs);
+	void yawReal(GLdouble cs);
+	void rollReal(GLdouble cs);
+
+	void changePrj();
+
 protected:
 	
 	glm::dvec3 mEye = { 0.0, 0.0, 500.0 };  // camera's position
@@ -57,9 +67,14 @@ protected:
 
 	Viewport* mViewPort;   // the viewport
 
+	glm::dvec3 mRight;
+	glm::dvec3 mFront;
+	glm::dvec3 mUpward;
+
 	void setVM();
 	void setPM();
 
+	void setAxes();
 };
 //-------------------------------------------------------------------------
 
