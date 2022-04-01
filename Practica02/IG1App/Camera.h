@@ -22,6 +22,7 @@ public:
 	
 	void set2D();
 	void set3D();
+	void setCenital();
 	
 	void pitch(GLdouble a); // rotates a degrees on the X axis
 	void yaw(GLdouble a);   // rotates a degrees on the Y axis
@@ -48,6 +49,10 @@ public:
 
 	void changePrj();
 
+	void orbit(GLdouble incAng, GLdouble incY);
+
+	void update();
+
 protected:
 	
 	glm::dvec3 mEye = { 0.0, 0.0, 500.0 };  // camera's position
@@ -70,6 +75,8 @@ protected:
 	glm::dvec3 mRight;
 	glm::dvec3 mFront;
 	glm::dvec3 mUpward;
+
+	GLdouble mRadio, mAng;
 
 	void setVM();
 	void setPM();

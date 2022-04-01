@@ -30,6 +30,8 @@ void Camera::setVM()
 
 void Camera::set2D() 
 {
+	mAng = -90;
+	mRadio = 500;
 	mEye = dvec3(0, 0, 500);
 	mLook = dvec3(0, 0, 0);
 	mUp = dvec3(0, 1, 0);
@@ -39,9 +41,21 @@ void Camera::set2D()
 
 void Camera::set3D() 
 {
+	mAng = -45;
+	mRadio = 500;
 	mEye = dvec3(500, 500, 500);  
 	mLook = dvec3(0, 10, 0);   
 	mUp = dvec3(0, 1, 0);
+	setVM();
+}
+
+void Camera::setCenital()
+{
+	mAng = 0;
+	mRadio = 0;
+	mEye = dvec3(0, 500, 0);
+	mLook = dvec3(0, 0, 0);
+	mUp = dvec3(0, 0, -1);
 	setVM();
 }
 //-------------------------------------------------------------------------
@@ -128,15 +142,29 @@ void Camera::changePrj()
 
 	setPM();
 }
+void Camera::orbit(GLdouble incAng, GLdouble incY)
+{
+	mAng += incAng;
+	mEye.x = mLook.x + cos(radians(mAng)) * mRadio;
+	mEye.z = mLook.z - sin(radians(mAng)) * mRadio;
+	mEye.y += incY;
+	setVM();
+}
+void Camera::update()
+{
+	orbit(5, 0);
+}
 //-------------------------------------------------------------------------
 
 void Camera::setPM() 
 {
 	if (bOrto) { //  if orthogonal projection
+		mNearVal = 1;
 		mProjMat = ortho(xLeft*mScaleFact, xRight*mScaleFact, yBot*mScaleFact, yTop*mScaleFact, mNearVal, mFarVal);
 		// glm::ortho defines the orthogonal projection matrix
 	}
 	else {
+		mNearVal = 2*yTop;
 		mProjMat = frustum(xLeft * mScaleFact, xRight * mScaleFact, yBot * mScaleFact, yTop * mScaleFact, mNearVal, mFarVal);
 	}
 }

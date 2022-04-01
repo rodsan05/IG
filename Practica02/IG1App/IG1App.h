@@ -75,6 +75,10 @@ protected:
 
 	GLuint mLastUpdateTime = 0;
 	bool updating = false;
+
+	bool m2Vistas;
+
+	void display2V();
 	//-------------------------------------------------------------------------
 };
 #endif //_H_IG1App_H_

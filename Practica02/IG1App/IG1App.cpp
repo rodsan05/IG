@@ -94,7 +94,13 @@ void IG1App::display()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clears the back buffer
 
-	mScene->render(*mCamera);  // uploads the viewport and camera to the GPU
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if (m2Vistas) { 
+		
+		display2V();
+	}
+
+	else mScene->render(*mCamera);
 
 	glutSwapBuffers();	// swaps the front and back buffer
 }
@@ -129,7 +135,7 @@ void IG1App::key(unsigned char key, int x, int y)
 		mCamera->set3D();
 		break;
 	case 'o':
-		mCamera->set2D();
+		mCamera->setCenital();
 		break;
 	case 'u':
 		mScene->update();;
@@ -142,6 +148,9 @@ void IG1App::key(unsigned char key, int x, int y)
 		break;
 	case 'p':
 		mCamera->changePrj();
+		break;
+	case 'k':
+		m2Vistas = !m2Vistas;
 		break;
 	case '0':
 		mScene->changeScene(0);//Cambia a la escena 0
@@ -212,8 +221,31 @@ void IG1App::update() {
 	if (updating) {
 		if (glutGet(GLUT_ELAPSED_TIME) - mLastUpdateTime > (1000 / 60)) {
 			mScene->update();
+			mCamera->update();
 			mLastUpdateTime = glutGet(GLUT_ELAPSED_TIME);
 			glutPostRedisplay();
 		}
 	}
+}
+
+void IG1App::display2V()
+{
+	Camera auxCam = *mCamera;
+	Viewport auxVP = *mViewPort;
+
+	mViewPort->setSize(mWinW / 2, mWinH);
+
+	auxCam.setSize(mViewPort->width(), mViewPort->height());
+
+	//Viewport 1
+	mViewPort->setPos(0, 0);
+	auxCam.set3D();
+	mScene->render(auxCam);
+
+	//Viewport 2
+	mViewPort->setPos(mWinW / 2, 0);
+	auxCam.setCenital();
+	mScene->render(auxCam);
+
+	*mViewPort = auxVP;
 }

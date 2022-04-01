@@ -27,6 +27,8 @@ void Scene::init(int id_)
 		CrearEntidad(new Poligono(120, 200.0, { 255,0,255,1 }), false, nullptr);
 		CrearEntidad(new TrianguloRGB(40.0), false, nullptr);
 
+		
+
 	}
 	else if (mId == 1) 
 	{
