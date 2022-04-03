@@ -298,14 +298,17 @@ void ContornoCaja::render(glm::dmat4 const& modelViewMat) const
 Caja::Caja(GLdouble lon, Texture* t, Texture* inText)
 {
 	mMesh = Mesh::generaContCajaTexCor(lon);
+
+	mModelMat = translate(mModelMat, dvec3(0, lon + 2, 0));
+
 	top = Mesh::generaRectanguloTexCor(lon, lon, 1, 1);
 	
-	mModelMatTop = translate(dmat4(1), dvec3(0, lon/2, 0));
+	mModelMatTop = translate(dmat4(1), dvec3(0, lon+2, 0));
 	mModelMatTop = rotate(mModelMatTop, radians(-90.0), dvec3(1, 0, 0));
 
 	bottom = Mesh::generaRectanguloTexCor(lon, lon, 1, 1);
 
-	mModelMatBot = translate(dmat4(1), dvec3(0, -lon/2, 0));
+	mModelMatBot = translate(dmat4(1), dvec3(0, 2, 0));
 	mModelMatBot = rotate(mModelMatBot, radians(90.0), dvec3(1, 0, 0));
 
 	mTexture = t;
@@ -376,8 +379,8 @@ void Caja::update()
 	alpha += 2.0 * dir;
 	beta += 2.0 * dir;
 	
-	mModelMatTop = translate(dmat4(1), dvec3(l / 2 * cos(radians(alpha)) + l/2, l / 2 * sin(radians(alpha)), 0));
-	mModelMatTop = translate(mModelMatTop, dvec3(0, l / 2, 0));
+	mModelMatTop = translate(dmat4(1), dvec3(l / 2 * cos(radians(alpha)) + l / 2, l/2 * sin(radians(alpha)), 0));
+	mModelMatTop = translate(mModelMatTop, dvec3(0, (l + 1), 0));
 	mModelMatTop = rotate(mModelMatTop, radians(beta), dvec3(0, 0, 1));
 	mModelMatTop = rotate(mModelMatTop, radians(-90.0), dvec3(1, 0, 0));
 }

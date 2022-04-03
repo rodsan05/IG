@@ -18,11 +18,7 @@ void Scene::init(int id_)
 
 	//ejercicio rotar Triangulo 
 	if (mId == 0) {
-		//Crear Caja con tapa
-		auto caja = new Caja(25, gTextures[3], gTextures[7]);
-		caja->setModelMat((translate(dmat4(1), dvec3(0, 0, 0))));
-		caja->setColor(dvec4(1, 1, 1, 1));
-		CrearEntidad(caja, false, nullptr);
+		
 		//Crear Triangulo
 		CrearEntidad(new Poligono(120, 200.0, { 255,0,255,1 }), false, nullptr);
 		CrearEntidad(new TrianguloRGB(40.0), false, nullptr);
@@ -41,7 +37,11 @@ void Scene::init(int id_)
 		cr->setModelMat(translate(cr->modelMat(), dvec3(0, 25, 0)));
 		CrearEntidad(cr, true, gTextures[9]);
 
-		
+		//Crear Caja con tapa
+		auto caja = new Caja(25, gTextures[3], gTextures[7]);
+		caja->setModelMat((translate(dmat4(1), dvec3(0, 0, 0))));
+		caja->setColor(dvec4(1, 1, 1, 1));
+		CrearEntidad(caja, false, nullptr);
 
 		//Crear estrella con textura
 		auto estrella = new Estrella3D(20.0, 8, 15.0);

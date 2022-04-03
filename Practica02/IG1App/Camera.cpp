@@ -152,7 +152,6 @@ void Camera::orbit(GLdouble incAng, GLdouble incY)
 }
 void Camera::update()
 {
-	orbit(5, 0);
 }
 //-------------------------------------------------------------------------
 

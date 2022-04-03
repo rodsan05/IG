@@ -53,6 +53,10 @@ protected:
 	void key(unsigned char key, int x, int y);  // keypress event
 	void specialKey(int key, int x, int y);     // keypress event for special characters
 	void update();
+	void mouse(int button, int state, int x, int y);
+	void motion(int x, int y);
+	void mouseWheel(int wheelButtonNumber, int direction, int x, int y);
+
 
 	// static callbacks 
 	static void s_display() { s_ig1app.display(); };
@@ -60,6 +64,9 @@ protected:
 	static void s_key(unsigned char key, int x, int y) { s_ig1app.key(key, x, y); };
 	static void s_specialKey(int key, int x, int y) { s_ig1app.specialKey(key, x, y); };
 	static void s_update() { s_ig1app.update(); };
+	static void s_mouse(int button, int state, int x, int y) { s_ig1app.mouse(button, state, x, y); };
+	static void s_motion(int x, int y) { s_ig1app.motion(x, y); };
+	static void s_mouseWheel(int n, int d, int x, int y) { s_ig1app.mouseWheel(n, d, x, y); };
 
 	// Viewport position and size
 	Viewport* mViewPort = nullptr;
@@ -79,6 +86,9 @@ protected:
 	bool m2Vistas;
 
 	void display2V();
+
+	glm::dvec2 mMouseCoord; 
+	int mMouseButt;
 	//-------------------------------------------------------------------------
 };
 #endif //_H_IG1App_H_
