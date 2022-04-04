@@ -70,10 +70,15 @@ protected:
 
 	// Viewport position and size
 	Viewport* mViewPort = nullptr;
+	Viewport* vpAux = nullptr;
 	// Camera position, view volume and projection
 	Camera* mCamera = nullptr;
+	Camera* camAux = nullptr;
+	Camera* activeCam = nullptr;
 	// Graphics objects of the scene
 	Scene* mScene = nullptr;
+	Scene* sceneAux = nullptr;
+	Scene* activeScene = nullptr;
 
 	bool mStop = false; // main event processing loop
 	int mWinId = 0;	    // window's identifier
@@ -86,6 +91,7 @@ protected:
 	bool m2Vistas;
 
 	void display2V();
+	void display1V();
 
 	glm::dvec2 mMouseCoord; 
 	int mMouseButt;

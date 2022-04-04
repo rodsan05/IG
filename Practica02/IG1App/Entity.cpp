@@ -299,7 +299,7 @@ Caja::Caja(GLdouble lon, Texture* t, Texture* inText)
 {
 	mMesh = Mesh::generaContCajaTexCor(lon);
 
-	mModelMat = translate(mModelMat, dvec3(0, lon + 2, 0));
+	mModelMat = translate(dmat4(1), dvec3(0, lon/2 + 2, 0));
 
 	top = Mesh::generaRectanguloTexCor(lon, lon, 1, 1);
 	
@@ -322,6 +322,8 @@ Caja::Caja(GLdouble lon, Texture* t, Texture* inText)
 Caja::~Caja()
 {
 	delete mMesh; mMesh = nullptr;
+	delete top; top = nullptr;
+	delete bottom; bottom = nullptr;
 }
 
 void Caja::render(glm::dmat4 const& modelViewMat) const

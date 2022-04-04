@@ -39,7 +39,6 @@ void Scene::init(int id_)
 
 		//Crear Caja con tapa
 		auto caja = new Caja(25, gTextures[3], gTextures[7]);
-		caja->setModelMat((translate(dmat4(1), dvec3(0, 0, 0))));
 		caja->setColor(dvec4(1, 1, 1, 1));
 		CrearEntidad(caja, false, nullptr);
 
