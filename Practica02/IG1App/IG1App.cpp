@@ -300,7 +300,7 @@ void IG1App::mouseWheel(int wheelButtonNumber, int direction, int x, int y)
 
 	if (m2Vistas) {
 
-		if (mMouseCoord.x < glutGet(GLUT_WINDOW_WIDTH)) {
+		if (mMouseCoord.x < glutGet(GLUT_WINDOW_WIDTH) / 2) {
 
 			activeCam = mCamera;
 			activeScene = mScene;

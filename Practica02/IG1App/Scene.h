@@ -44,6 +44,8 @@ protected:
 	void CrearEntidad(Abs_Entity* entity, bool translucent, Texture* tex);
 	void cargarBMPs();
 
+	void sceneDirLight(Camera const& cam) const;
+
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
 	std::vector<Abs_Entity*> gObjectsOpaque;//Entidades opacas
 	std::vector<Abs_Entity*> gObjectsTranslucent;// Entidades trans

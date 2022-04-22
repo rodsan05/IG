@@ -45,6 +45,68 @@ protected:
 	glm::dvec4 mColor;
 	Texture* mTexture = nullptr;
 };
+
+class CompoundEntity : public Abs_Entity
+{
+public:
+	CompoundEntity();
+	~CompoundEntity();
+
+	void addEntity(Abs_Entity* ae, bool translucent);
+
+	void render(glm::dmat4 const& modelViewMat) const;
+
+protected:
+	std::vector<Abs_Entity*> gObjects;
+	std::vector<Abs_Entity*> gObjectsTranslucent;
+};
+
+class QuadricEntity : public Abs_Entity
+{
+public:
+	QuadricEntity();
+	~QuadricEntity() { gluDeleteQuadric(q); };
+protected:
+	GLUquadricObj* q;
+};
+
+class Sphere : public QuadricEntity {
+public:
+	Sphere(GLdouble r_); // r es el radio de la esfera
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	GLdouble r;
+};
+
+class Cylinder : public QuadricEntity {
+public:
+	Cylinder(GLdouble baseR_, GLdouble topR_, GLdouble height_);
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	GLdouble baseR;
+	GLdouble topR;
+	GLdouble height;
+};
+
+class Disk : public QuadricEntity {
+public:
+	Disk(GLdouble innerR_, GLdouble outerR_);
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	GLdouble innerR;
+	GLdouble outerR;
+};
+
+class PartialDisk : public QuadricEntity {
+public:
+	PartialDisk(GLdouble innerR_, GLdouble outerR_, GLdouble startAngle_, GLdouble sweepAngle_);
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	GLdouble innerR;
+	GLdouble outerR;
+	GLdouble startAngle;
+	GLdouble sweepAngle;
+};
 //-------------------------------------------------------------------------
 
 class EjesRGB : public Abs_Entity 

@@ -386,3 +386,178 @@ void Caja::update()
 	mModelMatTop = rotate(mModelMatTop, radians(beta), dvec3(0, 0, 1));
 	mModelMatTop = rotate(mModelMatTop, radians(-90.0), dvec3(1, 0, 0));
 }
+
+QuadricEntity::QuadricEntity()
+{
+	q = gluNewQuadric();
+}
+
+Sphere::Sphere(GLdouble r_)
+{
+	r = r_;
+}
+
+void Sphere::render(glm::dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+
+	if (mColor != dvec4(0.0)) 
+	{
+		glEnable(GL_COLOR_MATERIAL);
+		glColor4d(mColor.r, mColor.g, mColor.b, mColor.a);
+	}
+
+	if (mTexture != nullptr) {
+	
+		mTexture->bind(GL_REPLACE);
+	}
+	gluSphere(q, r, 50, 50);
+	if (mTexture != nullptr) {
+
+		mTexture->unbind();
+	}
+
+	// Aquí se debe recuperar el color:
+	glColor4d(1.0, 1.0, 1.0, 1.0);
+}
+
+Cylinder::Cylinder(GLdouble baseR_, GLdouble topR_, GLdouble height_)
+{
+	baseR = baseR_;
+	topR = topR_;
+	height = height_;
+}
+
+void Cylinder::render(glm::dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+	
+	if (mColor != dvec4(0.0))
+	{
+		glEnable(GL_COLOR_MATERIAL);
+		glColor4d(mColor.r, mColor.g, mColor.b, mColor.a);
+	}
+
+	if (mTexture != nullptr) {
+
+		mTexture->bind(GL_REPLACE);
+	}
+	gluCylinder(q, baseR, topR, height, 50, 50);
+	if (mTexture != nullptr) {
+
+		mTexture->unbind();
+	}
+	
+	// Aquí se debe recuperar el color:
+	glColor4d(1.0, 1.0, 1.0, 1.0);
+}
+
+Disk::Disk(GLdouble innerR_, GLdouble outerR_)
+{
+	innerR = innerR_;
+	outerR = outerR_;
+}
+
+void Disk::render(glm::dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+	
+	if (mColor != dvec4(0.0))
+	{
+		glEnable(GL_COLOR_MATERIAL);
+		glColor4d(mColor.r, mColor.g, mColor.b, mColor.a);
+	}
+
+	if (mTexture != nullptr) {
+
+		mTexture->bind(GL_REPLACE);
+	}
+	gluDisk(q, innerR, outerR, 50, 50);
+	if (mTexture != nullptr) {
+
+		mTexture->unbind();
+	}
+
+	// Aquí se debe recuperar el color:
+	glColor4d(1.0, 1.0, 1.0, 1.0);
+}
+
+PartialDisk::PartialDisk(GLdouble innerR_, GLdouble outerR_, GLdouble startAngle_, GLdouble sweepAngle_)
+{
+	innerR = innerR_;
+	outerR = outerR_;
+	startAngle = startAngle_;
+	sweepAngle = sweepAngle_;
+}
+
+void PartialDisk::render(glm::dmat4 const& modelViewMat) const
+{
+	dmat4 aMat = modelViewMat * mModelMat;
+	upload(aMat);
+	
+	if (mColor != dvec4(0.0))
+	{
+		glEnable(GL_COLOR_MATERIAL);
+		glColor4d(mColor.r, mColor.g, mColor.b, mColor.a);
+	}
+
+	if (mTexture != nullptr) {
+
+		mTexture->bind(GL_REPLACE);
+	}
+	gluPartialDisk(q, innerR, outerR, 50, 50, startAngle, sweepAngle);
+	if (mTexture != nullptr) {
+
+		mTexture->unbind();
+	}
+
+	// Aquí se debe recuperar el color:
+	glColor4d(1.0, 1.0, 1.0, 1.0);
+}
+
+CompoundEntity::CompoundEntity()
+{
+}
+
+CompoundEntity::~CompoundEntity()
+{
+	for (Abs_Entity* el : gObjects)
+	{
+		delete el;  el = nullptr;
+	}
+	for (Abs_Entity* el : gObjectsTranslucent)
+	{
+		delete el;  el = nullptr;
+	}
+	gObjects.clear();
+	gObjectsTranslucent.clear();
+}
+
+void CompoundEntity::addEntity(Abs_Entity* ae, bool translucent)
+{
+	if (translucent) gObjectsTranslucent.push_back(ae);
+	else gObjects.push_back(ae);
+}
+
+void CompoundEntity::render(glm::dmat4 const& modelViewMat) const
+{
+	//gObjects opacos
+	for (Abs_Entity* elOpaque : gObjects)
+	{
+		elOpaque->render(modelViewMat);
+	}
+	//gObjects translucidos
+	glDepthMask(GL_FALSE);
+	glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	for (Abs_Entity* elTranslucent : gObjectsTranslucent)
+	{
+		elTranslucent->render(modelViewMat);
+	}
+	//dejamos los valores por defecto
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
+}
