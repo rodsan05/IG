@@ -561,3 +561,85 @@ void CompoundEntity::render(glm::dmat4 const& modelViewMat) const
 	glDepthMask(GL_TRUE);
 	glDisable(GL_BLEND);
 }
+
+AlaTIEAvanzado::AlaTIEAvanzado(GLdouble l, GLdouble h, GLdouble depth, Texture* t)
+{
+	mMesh = Mesh::generaAlaTIEAvanzado(l, h, depth);
+	mTexture = t;
+}
+
+AlaTIEAvanzado::~AlaTIEAvanzado()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void AlaTIEAvanzado::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		mTexture->bind(GL_REPLACE);
+		mMesh->render();
+		mTexture->unbind();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
+	}
+}
+
+TIEAvanzado::TIEAvanzado(GLdouble cabinRadius, GLdouble wingW, GLdouble wingH, GLdouble wingDepth, Texture* textureWing, GLdouble armRadius, GLdouble armLenght, GLdouble windowRadius)
+{
+	Sphere* cabin = new Sphere(cabinRadius);
+	
+	cabin->setColor(dvec4(0.0, 65.0 / 255, 106.0 / 255, 0.0));
+
+	addEntity(cabin, false);
+
+	GLdouble windowH = cabinRadius * 1.1;
+	Cylinder* window = new Cylinder(windowRadius, windowRadius, windowH);
+
+	//colocar ventana
+	window->setModelMat(rotate(window->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+
+	window->setColor(dvec4(0.0, 65.0 / 255, 106.0 / 255, 0.0));
+	
+	addEntity(window, false);
+
+	Disk* windowTop = new Disk(0, windowRadius);
+
+	//colocar ventana
+	windowTop->setModelMat(translate(windowTop->modelMat(), dvec3(windowH, 0, 0)));
+	windowTop->setModelMat(rotate(windowTop->modelMat(), radians(90.0), dvec3(0, 1, 0)));
+
+	windowTop->setColor(dvec4(0.0, 65.0 / 255, 106.0 / 255, 0.0));
+
+	addEntity(windowTop, false);
+
+	Cylinder* leftArm = new Cylinder(armRadius, armRadius, armLenght * 1.1);
+	//colocar brazo derecho
+	leftArm->setModelMat(translate(leftArm->modelMat(), dvec3(0, 0, cabinRadius - armLenght * 0.1)));
+
+	leftArm->setColor(dvec4(0.0, 65.0 / 255, 106.0 / 255, 0.0));
+
+	addEntity(leftArm, false);
+
+	Cylinder* rightArm = new Cylinder(armRadius, armRadius, armLenght * 1.1);
+	//colocar brazo izquierdo
+	rightArm->setModelMat(translate(rightArm->modelMat(), dvec3(0, 0, -1 * (cabinRadius + armLenght))));
+
+	rightArm->setColor(dvec4(0.0, 65.0 / 255, 106.0 / 255, 0.0));
+
+	addEntity(rightArm, false);
+
+	AlaTIEAvanzado* rightWing = new AlaTIEAvanzado(wingW, wingH, wingDepth, textureWing);
+
+	rightWing->setModelMat(translate(rightWing->modelMat(), dvec3(0, 0, -(cabinRadius + armLenght - wingDepth))));
+	rightWing->setModelMat(rotate(rightWing->modelMat(), radians(180.0), dvec3(0, 1, 0)));
+
+	addEntity(rightWing, true);
+
+	AlaTIEAvanzado* leftWing = new AlaTIEAvanzado(wingW, wingH, wingDepth, textureWing);
+
+	leftWing->setModelMat(translate(leftWing->modelMat(), dvec3(0, 0, cabinRadius + armLenght - wingDepth)));
+	
+	addEntity(leftWing, true);
+}

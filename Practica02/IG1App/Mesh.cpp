@@ -278,6 +278,30 @@ Mesh* Mesh::generaContRectTexCor(GLdouble xWidth, GLdouble yWidth, GLdouble heig
     return mesh;
 }
 
+Mesh* Mesh::generaAlaTIEAvanzado(GLdouble l, GLdouble h, GLdouble depth)
+{
+    Mesh* mesh = new Mesh();
+
+    mesh->mPrimitive = GL_TRIANGLE_STRIP;
+
+    mesh->mNumVertices = 8;
+    mesh->vVertices.reserve(mesh->mNumVertices);
+
+    mesh->vVertices.emplace_back(-l / 2, -h, 0);
+    mesh->vVertices.emplace_back(l / 2, -h, 0);
+
+    mesh->vVertices.emplace_back(-l / 2, -h / 2, depth);
+    mesh->vVertices.emplace_back(l / 2, -h / 2, depth);
+
+    mesh->vVertices.emplace_back(-l / 2, h / 2, depth);
+    mesh->vVertices.emplace_back(l / 2, h / 2, depth);
+
+    mesh->vVertices.emplace_back(-l / 2, h, 0);
+    mesh->vVertices.emplace_back(l / 2, h, 0);
+
+    return mesh;
+}
+
 Mesh* Mesh::generaContCaja(GLdouble lon)
 {
     Mesh* mesh = new Mesh();

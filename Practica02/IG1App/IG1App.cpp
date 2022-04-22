@@ -175,6 +175,9 @@ void IG1App::key(unsigned char key, int x, int y)
 	case '1':
 		mScene->changeScene(1);//Cambia a la escena 1
 		break;
+	case '2':
+		mScene->changeScene(2);//Cambia a la escena 1
+		break;
 	default:
 		need_redisplay = false;
 		break;

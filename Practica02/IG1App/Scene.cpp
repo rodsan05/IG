@@ -22,9 +22,6 @@ void Scene::init(int id_)
 		//Crear Triangulo
 		CrearEntidad(new Poligono(120, 200.0, { 255,0,255,1 }), false, nullptr);
 		CrearEntidad(new TrianguloRGB(40.0), false, nullptr);
-
-		
-
 	}
 	else if (mId == 1) 
 	{
@@ -60,7 +57,9 @@ void Scene::init(int id_)
 	}
 	else if (mId == 2)
 	{
-		
+		auto tieAvanzado = new TIEAvanzado(100, 200, 150, 100, gTextures[5], 20, 75, 50);
+
+		CrearEntidad(tieAvanzado, false, nullptr);
 	}
 	
 }	

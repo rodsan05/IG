@@ -227,5 +227,20 @@ protected:
 	int dir;
 };
 
+class AlaTIEAvanzado : public Abs_Entity 
+{
+public:
+	explicit AlaTIEAvanzado(GLdouble l, GLdouble h, GLdouble depth, Texture* t);
+	~AlaTIEAvanzado();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class TIEAvanzado : public CompoundEntity 
+{
+public:
+	explicit TIEAvanzado(GLdouble cabinRadius, GLdouble wingW, GLdouble wingH, GLdouble wingDepth, Texture* textureWing,
+		GLdouble armRadius, GLdouble armLenght, GLdouble windowRadius);
+};
+
 
 #endif //_H_Entities_H_

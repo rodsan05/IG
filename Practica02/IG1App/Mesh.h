@@ -28,6 +28,7 @@ public:
 	static Mesh* generaContCuboTexCor(GLdouble nl);
 	static Mesh* generaContornoRect(GLdouble xWidth, GLdouble yWidth, GLdouble height);
 	static Mesh* generaContRectTexCor(GLdouble xWidth, GLdouble yWidth, GLdouble height);
+	static Mesh* generaAlaTIEAvanzado(GLdouble l, GLdouble h, GLdouble depth);
 
 	Mesh() {};
 	virtual ~Mesh() {};
