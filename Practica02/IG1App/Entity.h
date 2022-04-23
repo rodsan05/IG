@@ -5,6 +5,7 @@
 #include <GL/freeglut.h>
 #include <glm.hpp>
 #include "Texture.h"
+#include <functional>
 
 #include "Mesh.h"
 
@@ -53,12 +54,18 @@ public:
 	~CompoundEntity();
 
 	void addEntity(Abs_Entity* ae, bool translucent);
+	void setUpdate(std::function<void()> updateFunct);
+
+	void update() override;
 
 	void render(glm::dmat4 const& modelViewMat) const;
 
 protected:
 	std::vector<Abs_Entity*> gObjects;
 	std::vector<Abs_Entity*> gObjectsTranslucent;
+
+	//funcion que ejecuta el update, una lambda void()
+	std::function<void()> updateFuntion = nullptr;
 };
 
 class QuadricEntity : public Abs_Entity
@@ -240,6 +247,14 @@ class TIEAvanzado : public CompoundEntity
 public:
 	explicit TIEAvanzado(GLdouble cabinRadius, GLdouble wingW, GLdouble wingH, GLdouble wingDepth, Texture* textureWing,
 		GLdouble armRadius, GLdouble armLenght, GLdouble windowRadius);
+};
+
+class Cubo : public Abs_Entity 
+{
+public:
+	explicit Cubo(GLdouble l);
+	~Cubo();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
 

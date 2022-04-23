@@ -86,13 +86,16 @@ TrianguloRGB::~TrianguloRGB()
 };
 
 void TrianguloRGB::update() {
-	angle += 3; angleCircle++;
-	//controlar que no se pase del rango del double
-	angle = (int)angle % 360; angleCircle = (int)angleCircle % 360;
-	//primero colocamos el triangulo segun angleCircle
-	setModelMat(translate(dmat4(1), dvec3(200 * cos(radians(angleCircle)), 200 * sin(radians(angleCircle)), 1)));
-	//lo rotamos segun angle
-	setModelMat(rotate(modelMat(), -radians(angle), glm::dvec3(0, 0, 1)));
+	
+	//antiguo apartado 14
+	
+	//angle += 3; angleCircle++;
+	////controlar que no se pase del rango del double
+	//angle = (int)angle % 360; angleCircle = (int)angleCircle % 360;
+	////primero colocamos el triangulo segun angleCircle
+	//setModelMat(translate(dmat4(1), dvec3(200 * cos(radians(angleCircle)), 200 * sin(radians(angleCircle)), 1)));
+	////lo rotamos segun angle
+	//setModelMat(rotate(modelMat(), -radians(angle), glm::dvec3(0, 0, 1)));
 }
 
 //-------------------------------------------------------------------------
@@ -542,12 +545,34 @@ void CompoundEntity::addEntity(Abs_Entity* ae, bool translucent)
 	else gObjects.push_back(ae);
 }
 
+void CompoundEntity::setUpdate(std::function<void()> updateFunct)
+{
+	updateFuntion = updateFunct;
+}
+
+void CompoundEntity::update()
+{
+	//si se le ha asignado alguna funcion al update la ejecuta
+	if (updateFuntion != nullptr) updateFuntion();
+
+	for (Abs_Entity* elOpaque : gObjects)
+	{
+		elOpaque->update();
+	}
+	for (Abs_Entity* elTranslucent : gObjectsTranslucent)
+	{
+		elTranslucent->update();
+	}
+}
+
 void CompoundEntity::render(glm::dmat4 const& modelViewMat) const
 {
+	dmat4 aMat = modelViewMat * mModelMat;
+
 	//gObjects opacos
 	for (Abs_Entity* elOpaque : gObjects)
 	{
-		elOpaque->render(modelViewMat);
+		elOpaque->render(aMat);
 	}
 	//gObjects translucidos
 	glDepthMask(GL_FALSE);
@@ -555,7 +580,7 @@ void CompoundEntity::render(glm::dmat4 const& modelViewMat) const
 
 	for (Abs_Entity* elTranslucent : gObjectsTranslucent)
 	{
-		elTranslucent->render(modelViewMat);
+		elTranslucent->render(aMat);
 	}
 	//dejamos los valores por defecto
 	glDepthMask(GL_TRUE);
@@ -642,4 +667,26 @@ TIEAvanzado::TIEAvanzado(GLdouble cabinRadius, GLdouble wingW, GLdouble wingH, G
 	leftWing->setModelMat(translate(leftWing->modelMat(), dvec3(0, 0, cabinRadius + armLenght - wingDepth)));
 	
 	addEntity(leftWing, true);
+}
+
+Cubo::Cubo(GLdouble l)
+{
+	mMesh = IndexMesh::generaCuboConTapasIndexado(l);
+}
+
+Cubo::~Cubo()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Cubo::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		mMesh->render();
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
+	}
 }

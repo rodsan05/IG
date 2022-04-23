@@ -3,6 +3,7 @@
 #include "IG1App.h"
 #include <gtc/matrix_transform.hpp>  
 #include <gtc/type_ptr.hpp>
+#include <iostream>
 
 using namespace glm;
 //-------------------------------------------------------------------------
@@ -21,7 +22,27 @@ void Scene::init(int id_)
 		
 		//Crear Triangulo
 		CrearEntidad(new Poligono(120, 200.0, { 255,0,255,1 }), false, nullptr);
-		CrearEntidad(new TrianguloRGB(40.0), false, nullptr);
+
+		CompoundEntity* fakeNode = new CompoundEntity();
+		CompoundEntity* fakeNode2 = new CompoundEntity();
+
+		TrianguloRGB* tr = new TrianguloRGB(40);
+		fakeNode2->addEntity(tr, false);
+		fakeNode->addEntity(fakeNode2, false);
+
+		fakeNode2->setModelMat(translate(fakeNode->modelMat(), dvec3(200, 0, 0)));
+
+		fakeNode2->setUpdate([fakeNode2] {
+
+			fakeNode2->setModelMat(rotate(fakeNode2->modelMat(), radians(-6.0), dvec3(0, 0, 1)));
+		});
+
+		fakeNode->setUpdate([fakeNode] { 
+			
+			fakeNode->setModelMat(rotate(fakeNode->modelMat(), radians(3.0), dvec3(0, 0, 1)));
+		});
+
+		CrearEntidad(fakeNode, false, nullptr);
 	}
 	else if (mId == 1) 
 	{
@@ -61,6 +82,12 @@ void Scene::init(int id_)
 
 		CrearEntidad(tieAvanzado, false, nullptr);
 	}
+	else if (mId == 3)
+	{
+		auto cubo = new Cubo(200);
+
+		CrearEntidad(cubo, false, nullptr);
+	}
 	
 }	
 //-------------------------------------------------------------------------
@@ -88,6 +115,7 @@ void Scene::setGL()
 	glClearColor(0.6, 0.7, 0.8, 1.0);   // background color (alpha=1 -> opaque)
 	glEnable(GL_DEPTH_TEST);  // enable Depth test 
 	glEnable(GL_TEXTURE_2D); //activar texturas
+	glEnable(GL_COLOR_MATERIAL);
 }
 //-------------------------------------------------------------------------
 void Scene::resetGL() 
