@@ -78,9 +78,20 @@ void Scene::init(int id_)
 	}
 	else if (mId == 2)
 	{
-		auto tieAvanzado = new TIEAvanzado(100, 200, 150, 100, gTextures[5], 20, 75, 50);
+		Sphere* planet = new Sphere(200);
+		planet->setColor(dvec4(255.0/255, 233.0/255, 0.0, 1.0));
 
-		CrearEntidad(tieAvanzado, false, nullptr);
+		CrearEntidad(planet, false, nullptr);
+
+		fakeNodeTie_ = new CompoundEntity();
+
+		auto tieAvanzado = new TIEAvanzado(10, 20, 15, 10, gTextures[5], 2, 7.5, 5);
+
+		fakeNodeTie_->addEntity(tieAvanzado, false);
+
+		tieAvanzado->setModelMat(translate(fakeNodeTie_->modelMat(), dvec3(0, 215, 0)));
+
+		CrearEntidad(fakeNodeTie_, false, nullptr);
 	}
 	else if (mId == 3)
 	{
@@ -111,8 +122,7 @@ void Scene::free()
 void Scene::setGL() 
 {
 	// OpenGL basic setting
-	//cambio a oscuro porque me cansa la vista
-	glClearColor(0.6, 0.7, 0.8, 1.0);   // background color (alpha=1 -> opaque)
+	glClearColor(0.0, 0.0, 0.0, 1.0);   // background color (alpha=1 -> opaque)
 	glEnable(GL_DEPTH_TEST);  // enable Depth test 
 	glEnable(GL_TEXTURE_2D); //activar texturas
 	glEnable(GL_COLOR_MATERIAL);
@@ -154,6 +164,16 @@ void Scene::capturaPantalla(const std::string& BMP_Name)
 	tex->loadColorBuffer(IG1App::s_ig1app.winWidth(), IG1App::s_ig1app.winHeight(), GL_FRONT);
 	tex->save(BMP_Name);//se guarda la textura nombre save.bmp
 	delete tex; //se borra la textura creada
+}
+
+void Scene::rota()
+{
+	fakeNodeTie_->setModelMat(rotate(fakeNodeTie_->modelMat(), radians(-3.0), dvec3(0, 1, 0)));
+}
+
+void Scene::orbita()
+{
+	fakeNodeTie_->setModelMat(rotate(fakeNodeTie_->modelMat(), radians(-3.0), dvec3(0, 0, 1)));
 }
 
 void Scene::sceneDirLight(Camera const& cam) const {

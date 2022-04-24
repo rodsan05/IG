@@ -169,6 +169,12 @@ void IG1App::key(unsigned char key, int x, int y)
 		if (!m2Vistas) display1V();
 		else display2V();
 		break;
+	case 'h': //la f esta ocupada por la foto
+		mScene->rota();
+		break;
+	case 'g':
+		mScene->orbita();
+		break;
 	case '0':
 		mScene->changeScene(0);//Cambia a la escena 0
 		break;

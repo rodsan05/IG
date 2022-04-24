@@ -36,6 +36,9 @@ public:
 	void update() { for (auto elem : gObjects) elem->update(); };
 	void capturaPantalla(const std::string& BMP_Name);
 
+	void rota();
+	void orbita();
+
 protected:
 	void free();
 	void setGL();
@@ -50,6 +53,8 @@ protected:
 	std::vector<Abs_Entity*> gObjectsOpaque;//Entidades opacas
 	std::vector<Abs_Entity*> gObjectsTranslucent;// Entidades trans
 	std::vector<Texture*> gTextures;//Texturas cargadas
+
+	CompoundEntity* fakeNodeTie_;
 	
 	int mId = 0; //id scena
 };
