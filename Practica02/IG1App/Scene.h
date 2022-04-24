@@ -14,7 +14,7 @@
 //Cargar bmps desde x rutas
 static const std::pair<std::string, int> bmps[10] = {
 	{"..\\Bmps\\baldosaC.bmp", 255}, {"..\\Bmps\\baldosaF.bmp", 255 }, {"..\\Bmps\\baldosaP.bmp", 255},
-	{"..\\Bmps\\container.bmp", 255}, {"..\\Bmps\\zelda.bmp", 255}, {"..\\Bmps\\noche.bmp", 255},
+	{"..\\Bmps\\container.bmp", 255}, {"..\\Bmps\\zelda.bmp", 255}, {"..\\Bmps\\noche.bmp", 150},
 	{"..\\Bmps\\papelC.bmp", 255}, { "..\\Bmps\\papelE.bmp", 255}, {"..\\Bmps\\windowC.bmp", 255},
 	{"..\\Bmps\\windowV.bmp", 150}
 };
