@@ -690,3 +690,68 @@ void Cubo::render(glm::dmat4 const& modelViewMat) const
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
 	}
 }
+
+Cabeza::Cabeza()
+{
+	//Cabeza
+	cabezaSph = new Sphere(100);
+	cabezaSph->setColor(dvec4(243.0, 129.0 / 255, 53.0 / 255, 0.0));
+	//Barba
+	barbaDsk = new PartialDisk(70, 80, 180, 180);
+	barbaDsk->setColor(dvec4(26.0/255, 220.0 /255, 104.0 /255, 0.0));
+	mModelMatBarba = translate(dmat4(1), dvec3(0, 4, 75));
+	mModelMatBarba = rotate(mModelMatBarba, radians(90.0), dvec3(0, 0, 1));
+	//Sombrero
+	sombreroDsk = new Disk(0, 150);
+	sombreroDsk->setColor(dvec4(246.0/255, 60.0 /255, 14.0 /255, 0.0));
+	mModelMatSombrero = translate(dmat4(1), dvec3(0, 80, 0));
+	mModelMatSombrero = rotate(mModelMatSombrero, radians(-90.0), dvec3(1, 0, 0));
+	//Ojo Izquierdo
+	ojoIzq = new Cylinder(10, 0, 20);
+	ojoIzq->setColor(dvec4(200.0 / 255, 245.0 / 255, 252.0 / 255, 0.0));
+	mModelMatOjoIzq = translate(dmat4(1), dvec3(60, 25, 80));
+	//Ojo Derecho
+	ojoDer = new Cylinder(10, 0, 20);
+	ojoDer->setColor(dvec4(91.0 / 255, 151.0 / 255, 230.0 / 255, 0.0));
+	mModelMatOjoDer = translate(dmat4(1), dvec3(-60, 25, 80));
+}
+
+Cabeza::~Cabeza()
+{
+	delete cabezaSph; cabezaSph = nullptr;
+	delete sombreroDsk; sombreroDsk = nullptr;
+	delete ojoDer; ojoDer = nullptr;
+	delete barbaDsk; barbaDsk = nullptr;
+	delete ojoIzq; ojoIzq = nullptr;
+}
+
+void Cabeza::render(glm::dmat4 const& modelViewMat) const
+{
+	if (cabezaSph != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glEnable(GL_CULL_FACE);
+		
+		glCullFace(GL_BACK);
+		cabezaSph->render(aMat);
+		//Barba
+		dmat4 aMatBarba = modelViewMat * mModelMatBarba;
+		upload(aMatBarba);
+		barbaDsk->render(aMatBarba);
+
+		//Sombrero
+		dmat4 aMatSombrero = modelViewMat * mModelMatSombrero;
+		upload(aMatSombrero);
+		sombreroDsk->render(aMatSombrero);
+		//Ojo izquierdo
+		dmat4 aMatOjoIzq = modelViewMat * mModelMatOjoIzq;
+		upload(aMatOjoIzq);
+		ojoIzq->render(aMatOjoIzq);
+		//Ojo derecho
+		dmat4 aMatOjoDer = modelViewMat * mModelMatOjoDer;
+		upload(aMatOjoDer);
+		ojoDer->render(aMatOjoDer);
+		glDisable(GL_CULL_FACE);
+	}
+}

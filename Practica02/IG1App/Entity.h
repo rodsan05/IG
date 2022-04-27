@@ -233,6 +233,26 @@ protected:
 	GLdouble beta;
 	int dir;
 };
+//Cara/Cabeza
+class Cabeza : public Abs_Entity
+{
+public:
+	explicit Cabeza();
+	~Cabeza();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+
+protected:
+	Sphere* cabezaSph;
+	PartialDisk* barbaDsk;
+	Disk* sombreroDsk;
+	Cylinder* ojoIzq;
+	Cylinder* ojoDer;
+
+	glm::dmat4 mModelMatBarba;
+	glm::dmat4 mModelMatSombrero;
+	glm::dmat4 mModelMatOjoIzq;
+	glm::dmat4 mModelMatOjoDer;
+};
 
 class AlaTIEAvanzado : public Abs_Entity 
 {

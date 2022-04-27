@@ -29,6 +29,7 @@ public:
 	static Mesh* generaContornoRect(GLdouble xWidth, GLdouble yWidth, GLdouble height);
 	static Mesh* generaContRectTexCor(GLdouble xWidth, GLdouble yWidth, GLdouble height);
 	static Mesh* generaAlaTIEAvanzado(GLdouble l, GLdouble h, GLdouble depth);
+	static Mesh* generaCabeza(GLdouble l);
 
 	Mesh() {};
 	virtual ~Mesh() {};
@@ -67,6 +68,21 @@ public:
 	virtual void draw() const;
 
 	static IndexMesh* generaCuboConTapasIndexado(GLdouble lon);
+};
+
+class MbR : public IndexMesh 
+{
+public:
+	MbR(int n_, int m_, dvec3* perfil_) : n(n_), m(m_), perfil(perfil_) {};
+	~MbR() {};
+
+	static MbR* generaMallaIndexadaPorRevolucion(int m_, int n_, glm::dvec3* perfil_);
+
+private:
+	int n; //n puntos perfil
+	int m; //m rotaciones que se toman
+
+	glm::dvec3* perfil;
 };
 //-------------------------------------------------------------------------
 

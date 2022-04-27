@@ -78,8 +78,14 @@ void Scene::init(int id_)
 	}
 	else if (mId == 2)
 	{
+		//Cabeza
+		auto cabeza = new Cabeza();
+		CrearEntidad(cabeza, false, nullptr);
+	}
+	else if (mId == 3)
+	{
 		Sphere* planet = new Sphere(200);
-		planet->setColor(dvec4(255.0/255, 233.0/255, 0.0, 1.0));
+		planet->setColor(dvec4(255.0 / 255, 233.0 / 255, 0.0, 1.0));
 
 		CrearEntidad(planet, false, nullptr);
 
@@ -93,7 +99,7 @@ void Scene::init(int id_)
 
 		CrearEntidad(fakeNodeTie_, false, nullptr);
 	}
-	else if (mId == 3)
+	else if (mId == 4)
 	{
 		auto cubo = new Cubo(200);
 

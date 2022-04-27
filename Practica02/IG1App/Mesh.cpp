@@ -322,6 +322,11 @@ Mesh* Mesh::generaAlaTIEAvanzado(GLdouble l, GLdouble h, GLdouble depth)
 	return mesh;
 }
 
+Mesh* Mesh::generaCabeza(GLdouble l)
+{
+	return nullptr;
+}
+
 Mesh* Mesh::generaContCaja(GLdouble lon)
 {
 	Mesh* mesh = new Mesh();
@@ -488,6 +493,67 @@ IndexMesh* IndexMesh::generaCuboConTapasIndexado(GLdouble lon)
 
 	//normales
 	mesh->vNormals.reserve(mesh->mNumVertices);
+	mesh->buildNormalVectors(mesh->vNormals);
+
+	return mesh;
+}
+
+MbR* MbR::generaMallaIndexadaPorRevolucion(int m_, int n_, glm::dvec3* perfil_)
+{
+	MbR* mesh = new MbR(m_, n_, perfil_);
+
+	mesh->mPrimitive = GL_TRIANGLES;
+	mesh->mNumVertices = m_ * n_;
+	
+	mesh->vVertices.reserve(mesh->mNumVertices);
+
+	dvec3* vertices = new dvec3[mesh->mNumVertices];
+
+	for (int i = 0; i < n_; i++) {
+
+		GLdouble theta = i * 360 / n_;
+		GLdouble c = cos(radians(theta));
+		GLdouble s = sin(radians(theta));
+
+		for (int j = 0; j < m_; j++) {
+			int indice = i * m_ + j;
+			GLdouble x = c * perfil_[j].x + s * perfil_[j].z;
+			GLdouble z = -s * perfil_[j].x + c * perfil_[j].z;
+			vertices[indice] = dvec3(x, perfil_[j].y, z);
+		}
+	}
+
+	for (int i = 0u; i < mesh->mNumVertices; i++) 
+	{
+		mesh->vVertices.push_back(vertices[i]);
+	}
+
+	mesh->vIndices = new GLuint[6*n_*m_];
+
+	int indiceMayor = 0;
+	for (int i = 0; i < n_; i++) {
+
+		for (int j = 0; j < m_ - 1; j++) {
+
+			int indice = i * m_ + j;
+
+			mesh->vIndices[indiceMayor] = indice;
+			indiceMayor++;
+			mesh->vIndices[indiceMayor] = (indice + m_) % (n_ * m_);
+			indiceMayor++;
+			mesh->vIndices[indiceMayor] = (indice + m_ + 1) % (n_ * m_);
+			indiceMayor++;
+			mesh->vIndices[indiceMayor] = (indice + m_ + 1) % (n_ * m_);
+			indiceMayor++;
+			mesh->vIndices[indiceMayor] = (indice + 1);
+			indiceMayor++;
+			mesh->vIndices[indiceMayor] = (indice + m_) % (n_ * m_);
+			indiceMayor++;
+			mesh->vIndices[indiceMayor] = indice;
+			indiceMayor++;
+		}
+	}
+
 	mesh->buildNormalVectors(mesh->vNormals);
 
 	return mesh;
