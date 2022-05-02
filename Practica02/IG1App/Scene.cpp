@@ -107,7 +107,7 @@ void Scene::init(int id_)
 	}
 	else if (mId == 5)
 	{
-		auto cono = new Esfera(100, 5, 10);
+		auto cono = new Esfera(100, 10, 20);
 
 		CrearEntidad(cono, false, nullptr);
 	}

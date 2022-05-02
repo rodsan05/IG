@@ -760,13 +760,13 @@ Esfera::Esfera(GLdouble r, int p, int m)
 {
 	dvec3* perfil = new dvec3[p+1];
 
-	float angle = 270;
+	float angle = 270.0;
 
-	for (auto i = 0u; i < p+1; i++) {
+	for (auto i = 0u; i < p+1; ++i) {
 		
-		perfil[i] = dvec3(r * cos(angle), r * sin(angle), 0.0);
-		
-		angle -= 180.0 / p;
+		angle = radians(270.0 - (i * (180.0 / p)));
+
+		perfil[i] = dvec3(r * cos(angle), r * sin(angle), 0);
 	}
 
 	mMesh = MbR::generaMallaIndexadaPorRevolucion(p+1, m, perfil);
@@ -783,7 +783,7 @@ void Esfera::render(glm::dmat4 const& modelViewMat) const
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mMesh->render();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
 	}
