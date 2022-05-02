@@ -105,7 +105,12 @@ void Scene::init(int id_)
 
 		CrearEntidad(cubo, false, nullptr);
 	}
-	
+	else if (mId == 5)
+	{
+		auto cono = new Esfera(100, 5, 10);
+
+		CrearEntidad(cono, false, nullptr);
+	}
 }	
 //-------------------------------------------------------------------------
 void Scene::free() 

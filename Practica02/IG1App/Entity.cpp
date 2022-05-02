@@ -755,3 +755,64 @@ void Cabeza::render(glm::dmat4 const& modelViewMat) const
 		glDisable(GL_CULL_FACE);
 	}
 }
+
+Esfera::Esfera(GLdouble r, int p, int m)
+{
+	dvec3* perfil = new dvec3[p+1];
+
+	float angle = 270;
+
+	for (auto i = 0u; i < p+1; i++) {
+		
+		perfil[i] = dvec3(r * cos(angle), r * sin(angle), 0.0);
+		
+		angle -= 180.0 / p;
+	}
+
+	mMesh = MbR::generaMallaIndexadaPorRevolucion(p+1, m, perfil);
+}
+
+Esfera::~Esfera()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Esfera::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		mMesh->render();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
+	}
+}
+
+Cono::Cono(GLdouble r, GLdouble h)
+{
+	dvec3* perfil = new dvec3[3];
+
+	perfil[0] = dvec3(0.5, 0, 0);
+	perfil[1] = dvec3(r, 0, 0);
+	perfil[2] = dvec3(0.5, h, 0);
+
+	mMesh = MbR::generaMallaIndexadaPorRevolucion(3, 20, perfil);
+}
+
+Cono::~Cono()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Cono::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		mMesh->render();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
+	}
+}

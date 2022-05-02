@@ -277,5 +277,20 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
+class Esfera : public Abs_Entity 
+{
+public:
+	explicit Esfera(GLdouble r, int p, int m);
+	~Esfera();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
+class Cono : public Abs_Entity 
+{
+public:
+	explicit Cono(GLdouble r, GLdouble h);
+	~Cono();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
 
 #endif //_H_Entities_H_

@@ -73,8 +73,8 @@ public:
 class MbR : public IndexMesh 
 {
 public:
-	MbR(int n_, int m_, dvec3* perfil_) : n(n_), m(m_), perfil(perfil_) {};
-	~MbR() {};
+	MbR(int n_, int m_, glm::dvec3* perfil_) : n(n_), m(m_), perfil(perfil_) {};
+	~MbR() { delete[] perfil; };
 
 	static MbR* generaMallaIndexadaPorRevolucion(int m_, int n_, glm::dvec3* perfil_);
 

@@ -115,11 +115,9 @@ Mesh* Mesh::generaPoligono(GLuint numL, GLdouble rd) {
 	mesh->mPrimitive = GL_LINE_LOOP;
 	mesh->mNumVertices = numL;
 	mesh->vVertices.reserve(mesh->mNumVertices);
-	for (float i = 0; i < numL; ++i) {
-		float angle = radians(90 + (i * (360 / mesh->mNumVertices)));
+	for (auto i = 0u; i < numL; ++i) {
+		float angle = radians(90.0 + (i * (360.0 / mesh->mNumVertices)));
 		mesh->vVertices.emplace_back(rd * cos(angle), rd * sin(angle), 0);
-		//colores??
-		/*mesh->vColors.emplace_back(0.0, 1.0, 0.0, 1.0)*/;
 	}
 	return mesh;
 
@@ -511,7 +509,7 @@ MbR* MbR::generaMallaIndexadaPorRevolucion(int m_, int n_, glm::dvec3* perfil_)
 
 	for (int i = 0; i < n_; i++) {
 
-		GLdouble theta = i * 360 / n_;
+		GLdouble theta = i * 360.0 / n_;
 		GLdouble c = cos(radians(theta));
 		GLdouble s = sin(radians(theta));
 
@@ -525,10 +523,11 @@ MbR* MbR::generaMallaIndexadaPorRevolucion(int m_, int n_, glm::dvec3* perfil_)
 
 	for (int i = 0u; i < mesh->mNumVertices; i++) 
 	{
-		mesh->vVertices.push_back(vertices[i]);
+		mesh->vVertices.emplace_back(vertices[i]);	
 	}
 
-	mesh->vIndices = new GLuint[6*n_*m_];
+	mesh->mNumIndices = 6 * n_ * (m_ - 1);
+	mesh->vIndices = new GLuint[mesh->mNumIndices];
 
 	int indiceMayor = 0;
 	for (int i = 0; i < n_; i++) {
@@ -547,13 +546,12 @@ MbR* MbR::generaMallaIndexadaPorRevolucion(int m_, int n_, glm::dvec3* perfil_)
 			indiceMayor++;
 			mesh->vIndices[indiceMayor] = (indice + 1);
 			indiceMayor++;
-			mesh->vIndices[indiceMayor] = (indice + m_) % (n_ * m_);
-			indiceMayor++;
 			mesh->vIndices[indiceMayor] = indice;
 			indiceMayor++;
 		}
 	}
 
+	mesh->vNormals.reserve(mesh->mNumVertices);
 	mesh->buildNormalVectors(mesh->vNormals);
 
 	return mesh;
