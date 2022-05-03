@@ -816,3 +816,41 @@ void Cono::render(glm::dmat4 const& modelViewMat) const
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
 	}
 }
+
+Toro::Toro(GLdouble r, GLdouble R, int p, int m)
+{
+	dvec3* perfil = new dvec3[p + 1];
+
+	float angle;
+
+	float radius = (R - r) / 2;
+
+	float distance = r + radius;
+
+	for (auto i = 0u; i < p + 1; ++i) {
+
+		//sumamos en vez de restar como en la esfera para que la luz se calcule correctamente
+		angle = radians(270 + (i * (360.0 / p)));
+
+		perfil[i] = dvec3(distance + radius * cos(angle), radius * sin(angle), 0);
+	}
+
+	mMesh = MbR::generaMallaIndexadaPorRevolucion(p + 1, m, perfil);
+}
+
+Toro::~Toro()
+{
+	delete mMesh; mMesh = nullptr;
+}
+
+void Toro::render(glm::dmat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
+		upload(aMat);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		mMesh->render();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
+	}
+}

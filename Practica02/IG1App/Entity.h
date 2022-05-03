@@ -293,4 +293,12 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
+class Toro : public Abs_Entity
+{
+public:
+	explicit Toro(GLdouble r, GLdouble R, int p, int m);
+	~Toro();
+	virtual void render(glm::dmat4 const& modelViewMat) const;
+};
+
 #endif //_H_Entities_H_

@@ -107,9 +107,15 @@ void Scene::init(int id_)
 	}
 	else if (mId == 5)
 	{
-		auto cono = new Esfera(100, 10, 20);
+		auto esfera = new Esfera(100, 10, 20);
 
-		CrearEntidad(cono, false, nullptr);
+		CrearEntidad(esfera, false, nullptr);
+	}
+	else if (mId == 6)
+	{
+		auto toro = new Toro(100, 200, 40, 80);
+
+		CrearEntidad(toro, false, nullptr);
 	}
 }	
 //-------------------------------------------------------------------------
