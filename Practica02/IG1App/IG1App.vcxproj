@@ -124,6 +124,7 @@
     <ClInclude Include="CheckML.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="IG1App.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Pixmap32RGBA.h" />
     <ClInclude Include="Scene.h" />
@@ -135,6 +136,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="IG1App.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Pixmap32RGBA.cpp" />
     <ClCompile Include="Scene.cpp" />
