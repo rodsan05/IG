@@ -68,6 +68,16 @@ protected:
 	std::function<void()> updateFuntion = nullptr;
 };
 
+class EntityWithMaterial : public Abs_Entity 
+{
+public:
+	EntityWithMaterial();
+	~EntityWithMaterial();
+
+protected:
+	Material* material_;
+};
+
 class QuadricEntity : public Abs_Entity
 {
 public:
