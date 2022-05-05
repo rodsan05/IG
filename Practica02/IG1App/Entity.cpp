@@ -34,9 +34,12 @@ void EjesRGB::render(dmat4 const& modelViewMat) const
 	if (mMesh != nullptr) {
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
+
+		glEnable(GL_COLOR_MATERIAL);
 		glLineWidth(2);
 		mMesh->render();
 		glLineWidth(1);
+		glDisable(GL_COLOR_MATERIAL);
 	}
 }
 
@@ -783,14 +786,20 @@ void Esfera::render(glm::dmat4 const& modelViewMat) const
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 
-		if (material_ == nullptr) 
+		if (material_ != nullptr) 
 		{
-			
+			material_->upload();
+
+		}
+		else if (mColor != dvec4(0.0))
+		{
+			glEnable(GL_COLOR_MATERIAL);
+			glColor4d(mColor.r, mColor.g, mColor.b, mColor.a);
 		}
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mMesh->render();
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
+
+		glDisable(GL_COLOR_MATERIAL);
 	}
 }
 

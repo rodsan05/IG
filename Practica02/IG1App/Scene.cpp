@@ -107,9 +107,24 @@ void Scene::init(int id_)
 	}
 	else if (mId == 5)
 	{
-		auto esfera = new Esfera(100, 10, 20);
+		auto esfera = new Esfera(100, 40, 80);
+
+		esfera->setColor(dvec4(255.0 / 255, 233.0 / 255, 0.0, 1.0));
+		
+		esfera->setModelMat(translate(esfera->modelMat(), dvec3(200, 0, 0)));
 
 		CrearEntidad(esfera, false, nullptr);
+
+		auto esfera2 = new Esfera(100, 40, 80);
+
+		Material* mat = new Material();
+		mat->setGold();
+
+		esfera2->setMaterial(mat);
+
+		esfera2->setModelMat(translate(esfera2->modelMat(), dvec3(0, 0, 200)));
+
+		CrearEntidad(esfera2, false, nullptr);
 	}
 	else if (mId == 6)
 	{
