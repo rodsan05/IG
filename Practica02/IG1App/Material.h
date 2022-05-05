@@ -1,6 +1,7 @@
 #pragma once
 #include <glm.hpp>
-#include <gl/GL.h>
+#include <GL/freeglut.h>
+
 
 class Material {
 

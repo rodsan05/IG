@@ -8,6 +8,7 @@
 #include <functional>
 
 #include "Mesh.h"
+#include "Material.h"
 
 //-------------------------------------------------------------------------
 
@@ -71,11 +72,13 @@ protected:
 class EntityWithMaterial : public Abs_Entity 
 {
 public:
-	EntityWithMaterial();
-	~EntityWithMaterial();
+	EntityWithMaterial() : Abs_Entity() { };
+	virtual ~EntityWithMaterial() { };
+
+	void setMaterial(Material* matl) { material_ = matl; };
 
 protected:
-	Material* material_;
+	Material* material_ = nullptr;
 };
 
 class QuadricEntity : public Abs_Entity
@@ -287,7 +290,7 @@ public:
 	virtual void render(glm::dmat4 const& modelViewMat) const;
 };
 
-class Esfera : public Abs_Entity 
+class Esfera : public EntityWithMaterial 
 {
 public:
 	explicit Esfera(GLdouble r, int p, int m);

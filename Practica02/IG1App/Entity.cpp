@@ -783,6 +783,11 @@ void Esfera::render(glm::dmat4 const& modelViewMat) const
 		dmat4 aMat = modelViewMat * mModelMat;  // glm matrix multiplication
 		upload(aMat);
 
+		if (material_ == nullptr) 
+		{
+			
+		}
+
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mMesh->render();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // por defecto
