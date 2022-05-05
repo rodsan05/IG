@@ -418,7 +418,7 @@ void Sphere::render(glm::dmat4 const& modelViewMat) const
 	
 		mTexture->bind(GL_REPLACE);
 	}
-	gluSphere(q, r, 50, 50);
+	gluSphere(q, r, 400, 400);
 	if (mTexture != nullptr) {
 
 		mTexture->unbind();
@@ -614,7 +614,7 @@ void AlaTIEAvanzado::render(glm::dmat4 const& modelViewMat) const
 	}
 }
 
-TIEAvanzado::TIEAvanzado(GLdouble cabinRadius, GLdouble wingW, GLdouble wingH, GLdouble wingDepth, Texture* textureWing, GLdouble armRadius, GLdouble armLenght, GLdouble windowRadius)
+TIEAvanzado::TIEAvanzado(GLdouble cabinRadius, GLdouble wingW, GLdouble wingH, GLdouble wingDepth, Texture* textureWing, GLdouble armRadius, GLdouble armLenght, GLdouble windowRadius, SpotLight* light_)
 {
 	Sphere* cabin = new Sphere(cabinRadius);
 	
@@ -670,6 +670,15 @@ TIEAvanzado::TIEAvanzado(GLdouble cabinRadius, GLdouble wingW, GLdouble wingH, G
 	leftWing->setModelMat(translate(leftWing->modelMat(), dvec3(0, 0, cabinRadius + armLenght - wingDepth)));
 	
 	addEntity(leftWing, true);
+
+	light = light_;
+}
+
+void TIEAvanzado::render(glm::dmat4 const& modelViewMat) const
+{
+	CompoundEntity::render(modelViewMat);
+
+	if (light != nullptr) light->upload(modelViewMat * mModelMat);
 }
 
 Cubo::Cubo(GLdouble l)

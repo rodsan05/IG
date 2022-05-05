@@ -7,6 +7,8 @@
 #include "Texture.h"
 #include <functional>
 
+#include "Light.h"
+
 #include "Mesh.h"
 #include "Material.h"
 
@@ -279,7 +281,12 @@ class TIEAvanzado : public CompoundEntity
 {
 public:
 	explicit TIEAvanzado(GLdouble cabinRadius, GLdouble wingW, GLdouble wingH, GLdouble wingDepth, Texture* textureWing,
-		GLdouble armRadius, GLdouble armLenght, GLdouble windowRadius);
+		GLdouble armRadius, GLdouble armLenght, GLdouble windowRadius, SpotLight* light_);
+	~TIEAvanzado() { delete light; };
+
+	void render(glm::dmat4 const& modelViewMat) const;
+protected:
+	SpotLight* light;
 };
 
 class Cubo : public Abs_Entity 

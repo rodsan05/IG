@@ -10,6 +10,7 @@
 #include "Texture.h"
 
 #include <vector>
+#include "Light.h"
 
 //Cargar bmps desde x rutas
 static const std::pair<std::string, int> bmps[10] = {
@@ -39,6 +40,19 @@ public:
 	void rota();
 	void orbita();
 
+	void setLights();
+	void uploadLights(Camera const& cam) const;
+
+	void enableDirLight();
+	void disableDirLight();
+	void enablePosLight();
+	void disablePosLight();
+	void enableSpotLight();
+	void disableSpotLight();
+	
+	void enableTieLight();
+	void disableTieLight();
+
 protected:
 	void free();
 	void setGL();
@@ -47,14 +61,18 @@ protected:
 	void CrearEntidad(Abs_Entity* entity, bool translucent, Texture* tex);
 	void cargarBMPs();
 
-	void sceneDirLight(Camera const& cam) const;
-
 	std::vector<Abs_Entity*> gObjects;  // Entities (graphic objects) of the scene
 	std::vector<Abs_Entity*> gObjectsOpaque;//Entidades opacas
 	std::vector<Abs_Entity*> gObjectsTranslucent;// Entidades trans
 	std::vector<Texture*> gTextures;//Texturas cargadas
 
 	CompoundEntity* fakeNodeTie_;
+
+	DirLight* dirLight;
+	PosLight* posLight;
+	SpotLight* spotLight;
+
+	SpotLight* tieSpotlight = nullptr;
 	
 	int mId = 0; //id scena
 };

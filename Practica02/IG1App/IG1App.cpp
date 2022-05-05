@@ -47,6 +47,8 @@ void IG1App::init()
 	camAux = new Camera(vpAux);
 	sceneAux = new Scene;
 
+	mScene->setLights();
+
 	mCamera->set2D();
 	mScene->init(1);
 
@@ -174,6 +176,30 @@ void IG1App::key(unsigned char key, int x, int y)
 		break;
 	case 'g':
 		mScene->orbita();
+		break;
+	case 'q':
+		mScene->enableDirLight();
+		break;
+	case 'w':
+		mScene->disableDirLight();
+		break;
+	case 'a':
+		mScene->enablePosLight();
+		break;
+	case 's':
+		mScene->disablePosLight();
+		break;
+	case 'z':
+		mScene->enableSpotLight();
+		break;
+	case 'x':
+		mScene->disableSpotLight();
+		break;
+	case 'v':
+		mScene->enableTieLight();
+		break;
+	case 'b':
+		mScene->disableTieLight();
 		break;
 	case '0':
 		mScene->changeScene(0);//Cambia a la escena 0

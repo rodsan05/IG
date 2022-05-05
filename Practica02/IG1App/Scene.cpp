@@ -17,6 +17,9 @@ void Scene::init(int id_)
 	// Graphics objects (entities) of the scene
 	CrearEntidad(new EjesRGB(400.0), false, nullptr);
 
+	GLfloat amb[] = { 0, 0, 0, 1.0 };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
+
 	//ejercicio rotar Triangulo 
 	if (mId == 0) {
 		
@@ -84,14 +87,21 @@ void Scene::init(int id_)
 	}
 	else if (mId == 3)
 	{
-		Sphere* planet = new Sphere(200);
+		auto planet = new Sphere(200);
 		planet->setColor(dvec4(255.0 / 255, 233.0 / 255, 0.0, 1.0));
+
+		tieSpotlight = new SpotLight();
+		tieSpotlight->setPosDir({ 0.0, 0.0, 0.0 });
+		tieSpotlight->setSpot({ 0.0, -1.0, 0.0 }, 100, 0);
+		tieSpotlight->setAmb({ 0, 0, 0, 1 });
+		tieSpotlight->setDiff({ 1, 1, 0, 1 });
+		tieSpotlight->setSpec({ 0.5, 0.5, 0.5, 1 });
 
 		CrearEntidad(planet, false, nullptr);
 
 		fakeNodeTie_ = new CompoundEntity();
 
-		auto tieAvanzado = new TIEAvanzado(10, 20, 15, 10, gTextures[5], 2, 7.5, 5);
+		auto tieAvanzado = new TIEAvanzado(10, 20, 15, 10, gTextures[5], 2, 7.5, 5, tieSpotlight);
 
 		fakeNodeTie_->addEntity(tieAvanzado, false);
 
@@ -158,6 +168,8 @@ void Scene::setGL()
 	glEnable(GL_DEPTH_TEST);  // enable Depth test 
 	glEnable(GL_TEXTURE_2D); //activar texturas
 	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_NORMALIZE);
 }
 //-------------------------------------------------------------------------
 void Scene::resetGL() 
@@ -208,27 +220,82 @@ void Scene::orbita()
 	fakeNodeTie_->setModelMat(rotate(fakeNodeTie_->modelMat(), radians(-3.0), dvec3(0, 0, 1)));
 }
 
-void Scene::sceneDirLight(Camera const& cam) const {
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glm::fvec4 posDir = { 1, 1, 1, 0 };
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixd(value_ptr(cam.viewMat()));
-	glLightfv(GL_LIGHT0, GL_POSITION, value_ptr(posDir));
-	glm::fvec4 ambient = { 0, 0, 0, 1 };
-	glm::fvec4 diffuse = { 1, 1, 1, 1 };
-	glm::fvec4 specular = { 0.5, 0.5, 0.5, 1 };
-	glLightfv(GL_LIGHT0, GL_AMBIENT, value_ptr(ambient));
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
-	glLightfv(GL_LIGHT0, GL_SPECULAR, value_ptr(specular));
+void Scene::setLights() {
+
+	dirLight = new DirLight();
+	dirLight->setPosDir({ 1.0, 1.0, 1.0 });
+	dirLight->setAmb({ 0, 0, 0, 1 });
+	dirLight->setDiff({ 1, 1, 1, 1 });
+	dirLight->setSpec({ 0.5, 0.5, 0.5, 1 });
+
+	posLight = new PosLight();
+	posLight->setPosDir({ 300.0, 300.0, 0.0 });
+	posLight->setAmb({ 0, 0, 0, 1 });
+	posLight->setDiff({ 1, 1, 0, 1 });
+	posLight->setSpec({ 0.5, 0.5, 0.5, 1 });
+
+	spotLight = new SpotLight();
+	spotLight->setPosDir({ 0.0, 0.0, 400.0 });
+	spotLight->setSpot({ 0.0, 0.0, -1.0 }, 10, 0);
+	spotLight->setAmb({ 0, 0, 0, 1 });
+	spotLight->setDiff({ 1, 1, 0, 1 });
+	spotLight->setSpec({ 0.5, 0.5, 0.5, 1 });
+}
+
+void Scene::uploadLights(Camera const& cam) const
+{
+	dirLight->upload(cam.viewMat());
+	posLight->upload(cam.viewMat());
+	spotLight->upload(cam.viewMat());
+}
+
+void Scene::enableDirLight()
+{
+	dirLight->enable();
+}
+
+void Scene::disableDirLight()
+{
+	dirLight->disable();
+}
+
+void Scene::enablePosLight()
+{
+	posLight->enable();
+}
+
+void Scene::disablePosLight()
+{
+	posLight->disable();
+}
+
+void Scene::enableSpotLight()
+{
+	spotLight->enable();
+}
+
+void Scene::disableSpotLight()
+{
+	spotLight->disable();
+}
+
+void Scene::enableTieLight()
+{
+	tieSpotlight->enable();
+}
+
+void Scene::disableTieLight()
+{
+	tieSpotlight->disable();
 }
 
 
 //Render editado para el Blending
 void Scene::render(Camera const& cam) const 
 {
-	sceneDirLight(cam);
+	uploadLights(cam);
 	cam.upload();
+
 	//gObjects opacos
 	for (Abs_Entity* elOpaque : gObjectsOpaque)
 	{
